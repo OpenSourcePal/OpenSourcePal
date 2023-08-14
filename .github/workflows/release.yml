@@ -2,16 +2,22 @@ name: Changelog
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main 
   pull_request:
     branches: '*'
 
 permissions:
-      contents: write
+      contents: read
       
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write 
+      issues: write 
+      pull-requests: write 
+      id-token: write 
     if: ${{ github.ref == 'refs/heads/main' }}
     steps: 
     - uses: actions/checkout@v2
