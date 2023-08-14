@@ -1,0 +1,1 @@
+{"version":3,"file":"contentScript.js","mappings":";;;;;AAAA","sources":["webpack://opensourcepal/./src/contentScript.ts"],"sourcesContent":["alert('Using content script');\n"],"names":[],"sourceRoot":""}

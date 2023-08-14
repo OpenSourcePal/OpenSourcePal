@@ -12,5 +12,15 @@
 		"default_title": "Click Me",
 		"default_popup": "popup.html"
 	},
-	"options_page": "options.html"
+	"permissions": ["tabs", "bookmarks"],
+	"options_page": "options.html",
+	"background": {
+		"service_worker": "background.js"
+	},
+	"content_scripts": [
+		{
+			"matches": ["https://github.com/"],
+			"js": ["contentScript.js"]
+		}
+	]
 }

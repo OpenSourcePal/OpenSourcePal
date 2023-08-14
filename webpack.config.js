@@ -10,12 +10,21 @@ module.exports = {
 	entry: {
 		popup: path.resolve('./src/popup.tsx'),
 		options: path.resolve('./src/options.tsx'),
+		background: path.resolve('./src/background.ts'),
+		contentScript: path.resolve('./src/contentScript.ts'),
 	},
 	module: {
 		rules: [
 			{
-				use: 'ts-loader',
-				test: /\.tsx$/,
+				use: [
+					{
+						loader: 'ts-loader',
+						options: {
+							compilerOptions: { noEmit: false },
+						},
+					},
+				],
+				test: /\.(tsx|ts)$/,
 				exclude: /node_modules/,
 			},
 			{

@@ -1,0 +1,1 @@
+alert('Using content script');
