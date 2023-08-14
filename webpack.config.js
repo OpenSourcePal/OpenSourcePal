@@ -4,7 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
-	entry: './src/test.tsx',
+	entry: {
+		popup: path.resolve('./src/popup.tsx'),
+	},
 	module: {
 		rules: [
 			{
@@ -24,11 +26,16 @@ module.exports = {
 				{ from: path.resolve('src/assets/icon.png'), to: path.resolve('dist') },
 			],
 		}),
+		new HtmlWebpackPlugin({
+			title: 'Open Source Pal',
+			filename: 'popup.html',
+			chunks: ['popup'],
+		}),
 	],
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
 	output: {
-		filename: 'index.js',
+		filename: '[name].js',
 	},
 };

@@ -30,13 +30,13 @@ eval("\n\nif (false) {} else {\n  module.exports = __webpack_require__(/*! ./cjs
 
 /***/ }),
 
-/***/ "./src/test.tsx":
-/*!**********************!*\
-  !*** ./src/test.tsx ***!
-  \**********************/
+/***/ "./src/popup.tsx":
+/*!***********************!*\
+  !*** ./src/popup.tsx ***!
+  \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n\nconst test = react__WEBPACK_IMPORTED_MODULE_0___default().createElement(\"h1\", null, \"Hello World\");\n\n\n//# sourceURL=webpack://opensourcepal/./src/test.tsx?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n\nconst test = react__WEBPACK_IMPORTED_MODULE_0___default().createElement(\"h1\", null, \"Hello World\");\n\n\n//# sourceURL=webpack://opensourcepal/./src/popup.tsx?");
 
 /***/ })
 
@@ -124,7 +124,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var reac
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/test.tsx");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/popup.tsx");
 /******/ 	
 /******/ })()
 ;
