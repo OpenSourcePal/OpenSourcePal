@@ -32,9 +32,6 @@
 		"type": "git",
 		"url": "https://github.com/Dun-sin/OpenSourcePal.git"
 	},
-	"publishConfig": {
-		"access": "restricted"
-	},
 	"release": {
 		"branches": [
 			"main"
