@@ -9,6 +9,7 @@ module.exports = {
 	devtool: 'cheap-module-source-map',
 	entry: {
 		popup: path.resolve('./src/popup.tsx'),
+		options: path.resolve('./src/options.tsx'),
 	},
 	module: {
 		rules: [
@@ -33,6 +34,15 @@ module.exports = {
 				],
 				test: /\.css$/i,
 			},
+			{
+				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				type: 'asset/resource',
+			},
+			{
+				test: /\.(woff|woff2|eot|ttf|otf)$/i,
+
+				type: 'asset/resource',
+			},
 		],
 	},
 	plugins: [
@@ -44,11 +54,7 @@ module.exports = {
 				},
 			],
 		}),
-		new HtmlWebpackPlugin({
-			title: 'Open Source Pal',
-			filename: 'popup.html',
-			chunks: ['popup'],
-		}),
+		...getHtmlPlugins(['popup', 'options']),
 	],
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
@@ -56,4 +62,20 @@ module.exports = {
 	output: {
 		filename: '[name].js',
 	},
+	optimization: {
+		splitChunks: {
+			chunks: 'all',
+		},
+	},
 };
+
+function getHtmlPlugins(chunks) {
+	return chunks.map(
+		(chunk) =>
+			new HtmlWebpackPlugin({
+				title: 'Open Source Pal',
+				filename: `${chunk}.html`,
+				chunks: [chunk],
+			}),
+	);
+}
