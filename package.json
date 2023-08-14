@@ -1,0 +1,23 @@
+{
+	"name": "opensourcepal",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "webpack --watch --progress --config webpack.config.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"ts-loader": "^9.4.4",
+		"typescript": "^5.1.6"
+	},
+	"devDependencies": {
+		"copy-webpack-plugin": "^11.0.0",
+		"html-webpack-plugin": "^5.5.3",
+		"webpack": "^5.88.2",
+		"webpack-cli": "^5.1.4"
+	}
+}

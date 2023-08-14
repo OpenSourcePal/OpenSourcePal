@@ -1,0 +1,15 @@
+{
+	"manifest_version": 3,
+	"name": "Open Source Pal",
+	"description": "Your open source assistant",
+	"version": "1.0.0",
+	"icons": {
+		"16": "icon.png",
+		"48": "icon.png",
+		"128": "icon.png"
+	},
+	"action": {
+		"default_title": "Click Me",
+		"default_popup": "popup.html"
+	}
+}
