@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "webpack --watch --progress --config webpack.config.js",
-		"semantic-release": "semantic-release --branches main"
+		"semantic-release": "semantic-release"
 	},
 	"author": "",
 	"license": "ISC",
@@ -34,5 +34,10 @@
 	},
 	"publishConfig": {
 		"access": "restricted"
+	},
+	"release": {
+		"branches": [
+			"main"
+		]
 	}
 }
