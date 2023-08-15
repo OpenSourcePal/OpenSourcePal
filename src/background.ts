@@ -5,3 +5,11 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.bookmarks.onCreated.addListener(() => {
 	console.log('I just bookmarked this page');
 });
+
+chrome.runtime.onInstalled.addListener(({ reason }) => {
+	if (reason === 'install') {
+		chrome.tabs.create({
+			url: 'onBoarding.html',
+		});
+	}
+});
