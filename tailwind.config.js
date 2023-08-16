@@ -4,12 +4,12 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				darkest: 'rgba(20, 29, 44, 100)',
-				dark: 'rgba(20, 29, 44, 80)',
-				'mid-dark': 'rgba(20, 29, 44, 60)',
-				'mid-light': 'rgba(20, 29, 44, 50)',
-				light: 'rgba(20, 29, 44, 30)',
-				lighest: 'rgba(20, 29, 44, 10)',
+				darkest: '#5A200C',
+				dark: '#9E3715',
+				'mid-dark': '#CB471A',
+				'mid-light': '#E56134',
+				light: '#F0A78E',
+				lightest: '#FCEDE8',
 			},
 			fontSize: {
 				f2xs: 'var(--step--2)',

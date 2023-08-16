@@ -2,25 +2,24 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/options.tsx":
-/*!*************************!*\
-  !*** ./src/options.tsx ***!
-  \*************************/
+/***/ "./src/options/options.tsx":
+/*!*********************************!*\
+  !*** ./src/options/options.tsx ***!
+  \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
-/* harmony import */ var _assets_tailwind_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./assets/tailwind.css */ "./src/assets/tailwind.css");
+/* harmony import */ var _assets_tailwind_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/tailwind.css */ "./src/assets/tailwind.css");
+/* harmony import */ var _utils_pageRoot__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/pageRoot */ "./src/utils/pageRoot.tsx");
 
 
 
-const popup = react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Options");
-const container = document.createElement('div');
-document.body.appendChild(container);
-const root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container);
-root.render(popup);
+const Options = () => {
+    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Options");
+};
+(0,_utils_pageRoot__WEBPACK_IMPORTED_MODULE_2__["default"])(Options);
 
 
 /***/ })
@@ -202,7 +201,7 @@ root.render(popup);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_sour-b53f7e","src_assets_tailwind_css"], () => (__webpack_require__("./src/options.tsx")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_sour-b53f7e","src_utils_pageRoot_tsx"], () => (__webpack_require__("./src/options/options.tsx")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

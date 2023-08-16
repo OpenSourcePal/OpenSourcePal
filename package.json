@@ -11,12 +11,14 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"dotenv-webpack": "^8.0.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"ts-loader": "^9.4.4",
 		"typescript": "^5.1.6"
 	},
 	"devDependencies": {
+		"@iconify/react": "^4.1.1",
 		"@tailwindcss/typography": "^0.5.9",
 		"@types/chrome": "^0.0.243",
 		"@types/react": "^18.2.20",
@@ -26,6 +28,7 @@
 		"copy-webpack-plugin": "^11.0.0",
 		"css-loader": "^6.8.1",
 		"cz-conventional-changelog": "^3.3.0",
+		"dotenv": "^16.3.1",
 		"html-webpack-plugin": "^5.5.3",
 		"postcss": "^8.4.27",
 		"postcss-loader": "^7.3.3",

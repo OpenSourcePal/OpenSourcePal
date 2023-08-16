@@ -1,16 +1,19 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const Dotenv = require('dotenv-webpack');
+
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
 	entry: {
-		popup: path.resolve('./src/popup.tsx'),
-		options: path.resolve('./src/options.tsx'),
-		background: path.resolve('./src/background.ts'),
-		contentScript: path.resolve('./src/contentScript.ts'),
-		onBoarding: path.resolve('./src/onboarding.tsx'),
+		popup: path.resolve('./src/popup/popup.tsx'),
+		options: path.resolve('./src/options/options.tsx'),
+		background: path.resolve('./src/background/background.ts'),
+		contentScript: path.resolve('./src/content/contentScript.ts'),
+		onBoarding: path.resolve('./src/onboarding/onBoarding.tsx'),
 	},
 	module: {
 		rules: [
@@ -60,8 +63,13 @@ module.exports = {
 					from: path.resolve('src/static'),
 					to: path.resolve('dist'),
 				},
+				{
+					from: path.resolve('./.env'),
+					to: path.resolve('dist'),
+				},
 			],
 		}),
+		new Dotenv(),
 		...getHtmlPlugins(['popup', 'options', 'onBoarding']),
 	],
 	resolve: {

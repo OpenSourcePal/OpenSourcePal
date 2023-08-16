@@ -2,27 +2,26 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/onboarding.tsx":
-/*!****************************!*\
-  !*** ./src/onboarding.tsx ***!
-  \****************************/
+/***/ "./src/onboarding/onBoarding.tsx":
+/*!***************************************!*\
+  !*** ./src/onboarding/onBoarding.tsx ***!
+  \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
-/* harmony import */ var _assets_tailwind_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./assets/tailwind.css */ "./src/assets/tailwind.css");
+/* harmony import */ var _assets_tailwind_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/tailwind.css */ "./src/assets/tailwind.css");
+/* harmony import */ var _utils_pageRoot__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/pageRoot */ "./src/utils/pageRoot.tsx");
 
 
 
-const popup = (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'h-screen w-screen bg-blue-900 flex justify-center items-center flex-col' },
-    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: ' text-4xl text-white' }, "Welcome to Open Source Pal"),
-    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Make Contributing to open source easier")));
-const container = document.createElement('div');
-document.body.appendChild(container);
-const root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container);
-root.render(popup);
+const OnBoarding = () => {
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'h-screen w-screen bg-blue-900 flex justify-center items-center flex-col' },
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: ' text-4xl text-white' }, "Welcome to Open Source Pal"),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Make Contributing to open source easier")));
+};
+(0,_utils_pageRoot__WEBPACK_IMPORTED_MODULE_2__["default"])(OnBoarding);
 
 
 /***/ })
@@ -204,7 +203,7 @@ root.render(popup);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_sour-b53f7e","src_assets_tailwind_css"], () => (__webpack_require__("./src/onboarding.tsx")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_sour-b53f7e","src_utils_pageRoot_tsx"], () => (__webpack_require__("./src/onboarding/onBoarding.tsx")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

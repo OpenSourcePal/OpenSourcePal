@@ -1,1 +1,0 @@
-alert('Using content script');
