@@ -12,7 +12,20 @@
 		"default_title": "Click Me",
 		"default_popup": "popup.html"
 	},
-	"permissions": ["tabs", "bookmarks"],
+	"permissions": [
+		"storage",
+		"activeTab",
+		"webNavigation",
+		"webRequest",
+		"bookmarks",
+		"identity"
+	],
+	"web_accessible_resources": [
+		{
+			"resources": ["redirect.html"],
+			"matches": ["<all_urls>"]
+		}
+	],
 	"options_page": "options.html",
 	"background": {
 		"service_worker": "background.js"

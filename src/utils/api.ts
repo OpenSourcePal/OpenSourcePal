@@ -1,14 +1,17 @@
-const BASE_URL = 'https://api.github.com/';
+const BASE_URL = 'https://api.github.com';
 
-export const getUser = async (authToken) => {
-	const response = await fetch(BASE_URL + 'user', {
-		method: 'GET',
-		headers: {
-			Accept: 'application/vnd.github+json',
-			Authorization: `Bearer ${authToken}`,
-		},
-	});
+export const getUserInfo = async (accessToken: string) => {
+	try {
+		const response = await fetch(`${BASE_URL}/user`, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
 
-	const data = await response.json();
-	return data;
+		const userData = await response.json();
+		return userData;
+	} catch (error) {
+		console.error('Error fetching user data:', error);
+		return null;
+	}
 };

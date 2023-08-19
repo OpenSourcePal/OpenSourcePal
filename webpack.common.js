@@ -67,13 +67,17 @@ module.exports = {
 					from: path.resolve('./.env'),
 					to: path.resolve('dist'),
 				},
+				{
+					from: path.resolve('./src/redirect.html'),
+					to: path.resolve('dist'),
+				},
 			],
 		}),
 		new Dotenv(),
 		...getHtmlPlugins(['popup', 'options', 'onBoarding']),
 	],
 	resolve: {
-		extensions: ['.tsx', '.ts', '.js'],
+		extensions: ['.tsx', '.ts', '.js', '.html'],
 	},
 	output: {
 		filename: '[name].js',

@@ -1,5 +1,3 @@
-import { getVerificationCode, pollAuthorization } from '../utils/oauth';
-
 chrome.runtime.onInstalled.addListener(() => {
 	console.log('Just installed my chrome extension');
 });
@@ -17,41 +15,35 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-	switch (request.action) {
-		case 'AUTH_REQUEST':
-			authRequest();
-			break;
+	console.log(request.action);
+	if (request.action === 'AUTH_CODE_RECEIVED') {
+		const authorizationCode = request.code;
+		fetch('https://github.com/login/oauth/access_token', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				client_id: process.env.GITHUB_ID,
+				client_secret: process.env.GITHUB_SECRET,
+				code: authorizationCode,
+			}),
+		})
+			.then((promise) =>
+				promise
+					.text()
+					.then((data) => {
+						const accessToken = new URLSearchParams(data).get('access_token');
+						chrome.storage.local
+							.set({ accessToken })
+							.then(() => console.log('done'));
 
-		default:
-			break;
+						sendResponse({ isSuccess: true, token: accessToken });
+					})
+					.catch((error) => console.log(error)),
+			)
+			.catch((error) => console.log(error));
+
+		return true;
 	}
 });
-
-async function authRequest() {
-	console.log('here');
-	const verification = await getVerificationCode();
-
-	console.log('Open %s', verification.verification_uri);
-	console.log('Enter code: %s', verification.user_code);
-
-	chrome.runtime.sendMessage({
-		type: 'AUTH_RESPONSE',
-		payload: {
-			code: verification.user_code,
-			uri: verification.verification_uri,
-		},
-	});
-
-	const accessToken = await pollAuthorization(
-		verification.device_code,
-		verification.interval,
-	);
-
-	console.log('AccessToken: ', accessToken);
-
-	console.log('Authorized Auto Gistify');
-
-	chrome.storage.sync.set({
-		accessToken,
-	});
-}
