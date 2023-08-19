@@ -12,8 +12,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _iconify_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @iconify/react */ "./node_modules/@iconify/react/dist/iconify.mjs");
-/* harmony import */ var _utils_pageRoot__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/pageRoot */ "./src/utils/pageRoot.tsx");
-/* harmony import */ var _utils_api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/api */ "./src/utils/api.ts");
+/* harmony import */ var react_loader_spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-loader-spinner */ "./node_modules/react-loader-spinner/dist/esm/index.js");
+/* harmony import */ var _utils_pageRoot__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/pageRoot */ "./src/utils/pageRoot.tsx");
+/* harmony import */ var _utils_api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/api */ "./src/utils/api.ts");
+
 
 
 
@@ -24,7 +26,9 @@ const Popup = () => {
         avatar: '',
         url: '',
     });
+    const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
     const authenticateGitHub = () => {
+        setLoading(true);
         const authorizationUrl = `https://github.com/login/oauth/authorize?client_id=${"edda6649c42341012303"}&redirect_uri=${encodeURIComponent(chrome.identity.getRedirectURL('./redirect.html'))}&scope=user`;
         chrome.identity.launchWebAuthFlow({
             url: authorizationUrl,
@@ -32,19 +36,24 @@ const Popup = () => {
         }, (redirectUrl) => {
             if (chrome.runtime.lastError || !redirectUrl) {
                 console.error('Error during GitHub authentication');
+                setLoading(false);
                 return;
             }
             const code = new URLSearchParams(new URL(redirectUrl).search).get('code');
             if (!code) {
                 console.error('GitHub authentication failed');
+                setLoading(false);
                 return;
             }
             chrome.runtime.sendMessage({ action: 'AUTH_CODE_RECEIVED', code }, (response) => {
-                (0,_utils_api__WEBPACK_IMPORTED_MODULE_3__.getUserInfo)(response.token).then((data) => setUserInfo({
-                    name: data.name,
-                    avatar: data.avatar_url,
-                    url: data.hrml_url,
-                }));
+                (0,_utils_api__WEBPACK_IMPORTED_MODULE_4__.getUserInfo)(response.token).then((data) => {
+                    setUserInfo({
+                        name: data.name,
+                        avatar: data.avatar_url,
+                        url: data.hrml_url,
+                    });
+                    setLoading(false);
+                });
             });
         });
     };
@@ -52,15 +61,16 @@ const Popup = () => {
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("header", { className: 'flex flex-col bg-dark py-2 px-4 text-lightest' },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: 'text-flg font-bold' }, "Open Source Pal"),
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", { className: 'text-base font-bold -mt-2' }, "Your Open Source Assistant")),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("main", { className: 'w-full p-4' }, userInfo.name === '' ? (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", { className: 'w-full flex justify-center items-center' },
+        loading ? (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'w-full flex justify-center items-center' },
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_loader_spinner__WEBPACK_IMPORTED_MODULE_2__.Dna, { visible: true, height: '80', width: '80', ariaLabel: 'dna-loading', wrapperStyle: { fill: 'rgb(203, 71, 26)' }, wrapperClass: 'dna-wrapper' }))) : (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("main", { className: 'w-full p-4' }, userInfo.name === '' ? (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", { className: 'w-full flex justify-center items-center' },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { className: 'h-12 p-2 bg-mid-dark rounded flex gap-1 text-lightest items-center justify-center', onClick: authenticateGitHub },
                 react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_iconify_react__WEBPACK_IMPORTED_MODULE_1__.Icon, { icon: 'devicon:github', className: 'h-6 w-6 text-lightest' }),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, "Connect Your GitHub")))) : (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null,
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, "Connect Your GitHub")))) : (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", { className: 'font-semibold text-fmd' },
             "Hello ",
             userInfo.name,
-            "\uD83D\uDC4B\uD83C\uDFFE")))));
+            "\uD83D\uDC4B\uD83C\uDFFE"))))));
 };
-(0,_utils_pageRoot__WEBPACK_IMPORTED_MODULE_2__["default"])(Popup);
+(0,_utils_pageRoot__WEBPACK_IMPORTED_MODULE_3__["default"])(Popup);
 
 
 /***/ }),
@@ -281,7 +291,7 @@ const getUserInfo = (accessToken) => __awaiter(void 0, void 0, void 0, function*
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_sour-b53f7e","vendors-node_modules_iconify_react_dist_iconify_mjs","src_utils_pageRoot_tsx"], () => (__webpack_require__("./src/popup/popup.tsx")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_sour-b53f7e","vendors-node_modules_react-loader-spinner_dist_esm_index_js-node_modules_iconify_react_dist_i-b04c54","src_utils_pageRoot_tsx"], () => (__webpack_require__("./src/popup/popup.tsx")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
