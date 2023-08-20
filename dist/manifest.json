@@ -22,7 +22,7 @@
 	],
 	"web_accessible_resources": [
 		{
-			"resources": ["redirect.html"],
+			"resources": ["redirect.html", "./content_main.js"],
 			"matches": ["<all_urls>"]
 		}
 	],
@@ -32,8 +32,8 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://github.com/"],
-			"js": ["contentScript.js"]
+			"matches": ["https://github.com/*"],
+			"js": ["./contentScript.js"]
 		}
 	]
 }
