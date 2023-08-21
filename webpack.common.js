@@ -12,7 +12,7 @@ module.exports = {
 		popup: path.resolve('./src/popup/popup.tsx'),
 		options: path.resolve('./src/options/options.tsx'),
 		background: path.resolve('./src/background/background.ts'),
-		contentScript: path.resolve('./src/content/contentScript.ts'),
+		contentScript: path.resolve('./src/content/contentScript.tsx'),
 		onBoarding: path.resolve('./src/onboarding/onBoarding.tsx'),
 	},
 	module: {
@@ -71,10 +71,14 @@ module.exports = {
 					from: path.resolve('./src/redirect.html'),
 					to: path.resolve('dist'),
 				},
+				{
+					from: path.resolve('./src/assets/tailwind.css'),
+					to: path.resolve('dist'),
+				},
 			],
 		}),
 		new Dotenv(),
-		...getHtmlPlugins(['popup', 'options', 'onBoarding']),
+		...getHtmlPlugins(['popup', 'options', 'onBoarding', 'contentScript']),
 	],
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js', '.html'],
