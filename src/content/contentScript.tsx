@@ -1,27 +1,42 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
+
+const root = document.createElement('div');
+root.id = 'root';
+document.body.appendChild(root);
 
 const ContentScript = () => {
 	return (
-		<div className='osp'>
+		<div className='root'>
 			<h1>Okay</h1>
 			<h2>This should work please</h2>
 		</div>
 	);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
+	const isRepo = window.location.href.match(
+		'https://github.com/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+(/.*)?',
+	);
+
+	console.log(isRepo);
 	console.log('content script');
-	const root = document.createElement('div');
-	root.id = 'osp';
-	document.body.appendChild(root);
 
-	const shadowRoot = root.attachShadow({ mode: 'open' });
+	let extensionRoot = document.getElementById('root');
+	if (extensionRoot) {
+		const shadowRoot = extensionRoot.shadowRoot;
 
-	const render = document.createElement('div');
-	shadowRoot.appendChild(render);
+		if (shadowRoot) {
+			let div = shadowRoot.getElementById('osp');
+			if (!div) {
+				div = document.createElement('div');
+				div.setAttribute('id', 'osp');
 
-	createRoot(render).render(<ContentScript />);
+				shadowRoot.appendChild(div);
+				ReactDOM.render(<ContentScript />, div);
+			}
+		}
+	}
 });
 
 // window.onload = () => {
