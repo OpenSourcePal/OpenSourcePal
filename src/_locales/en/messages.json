@@ -1,0 +1,14 @@
+{
+    "appName": {
+        "message": "Open Source Pal",
+        "description": "The name of the react extension."
+    },
+    "appDescription": {
+        "message": "Your Open Source Assistant",
+        "description": "The description of the extension."
+    },
+    "btnTooltip": {
+        "message": "Open Source Pal",
+        "description": "Tooltip for the button."
+    }
+}

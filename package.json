@@ -1,58 +1,104 @@
 {
-	"name": "opensourcepal",
-	"version": "0.0.0-development",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"dev": "webpack --watch --stats-error-details --progress --config webpack.dev.js",
-		"build": "webpack --progress --config webpack.prod.js",
-		"semantic-release": "semantic-release"
-	},
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"dotenv-webpack": "^8.0.1",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"react-loader-spinner": "^5.3.4",
-		"ts-loader": "^9.4.4",
-		"typescript": "^5.1.6"
-	},
-	"devDependencies": {
-		"@iconify/react": "^4.1.1",
-		"@tailwindcss/typography": "^0.5.9",
-		"@types/chrome": "^0.0.243",
-		"@types/react": "^18.2.20",
-		"@types/react-dom": "^18.2.7",
-		"@types/webextension-polyfill": "^0.10.1",
-		"autoprefixer": "^10.4.15",
-		"copy-webpack-plugin": "^11.0.0",
-		"css-loader": "^6.8.1",
-		"cz-conventional-changelog": "^3.3.0",
-		"dotenv": "^16.3.1",
-		"html-webpack-plugin": "^5.5.3",
-		"postcss": "^8.4.27",
-		"postcss-loader": "^7.3.3",
-		"semantic-release": "^21.0.7",
-		"style-loader": "^3.3.3",
-		"tailwindcss": "^3.3.3",
-		"webextension-polyfill": "^0.10.0",
-		"webpack": "^5.88.2",
-		"webpack-cli": "^5.1.4",
-		"webpack-merge": "^5.9.0"
-	},
-	"config": {
-		"commitizen": {
-			"path": "./node_modules/cz-conventional-changelog"
-		}
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Dun-sin/OpenSourcePal.git"
-	},
-	"release": {
-		"branches": [
-			"main"
-		]
-	}
+    "name": "OpenSourcePal",
+    "version": "0.0.0-development",
+    "description": "Your Open Source Assistant",
+    "main": "webpack.config.js",
+    "scripts": {
+        "dev:chrome": "cross-env NODE_ENV=development TARGET=chrome webpack",
+        "dev:firefox": "cross-env NODE_ENV=development TARGET=firefox webpack",
+        "dev:opera": "cross-env NODE_ENV=development TARGET=opera webpack",
+        "dev:edge": "cross-env NODE_ENV=development TARGET=edge webpack",
+        "profile:chrome": "cross-env NODE_ENV=profile TARGET=chrome webpack",
+        "profile:firefox": "cross-env NODE_ENV=profile TARGET=firefox webpack",
+        "profile:opera": "cross-env NODE_ENV=profile TARGET=opera webpack",
+        "profile:edge": "cross-env NODE_ENV=profile TARGET=edge webpack",
+        "build:chrome": "cross-env NODE_ENV=production TARGET=chrome webpack",
+        "build:firefox": "cross-env NODE_ENV=production TARGET=firefox webpack",
+        "build:opera": "cross-env NODE_ENV=production TARGET=opera webpack",
+        "build:edge": "cross-env NODE_ENV=production TARGET=edge webpack",
+        "upload:chrome": "cross-env NODE_ENV=upload TARGET=chrome webpack",
+        "upload:firefox": "cross-env NODE_ENV=upload TARGET=firefox webpack",
+        "upload:opera": "cross-env NODE_ENV=upload TARGET=opera webpack",
+        "upload:edge": "cross-env NODE_ENV=upload TARGET=edge webpack",
+        "build": "npm run build:chrome && npm run build:firefox && npm run build:opera && npm run build:edge",
+        "upload": "npm run upload:chrome && npm run upload:firefox && npm run upload:opera && npm run upload:edge",
+        "lint-fix": "eslint --ext js,jsx,ts,tsx, src --fix",
+        "semantic-release": "semantic-release"
+    },
+    "author": "Dun-sin",
+    "dependencies": {
+        "@iconify/react": "^4.1.1",
+        "clean-webpack-plugin": "^4.0.0",
+        "copy-webpack-plugin": "^11.0.0",
+        "core-js": "^3.32.0",
+        "cross-env": "^7.0.3",
+        "css-loader": "^6.8.1",
+        "dotenv": "^16.3.1",
+        "html-webpack-plugin": "^5.5.3",
+        "prop-types": "^15.8.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-loader-spinner": "^5.3.4",
+        "style-loader": "^3.3.3",
+        "terser-webpack-plugin": "^5.3.9",
+        "ts-node": "^10.9.1",
+        "webextension-polyfill": "^0.10.0",
+        "webpack": "^5.88.2",
+        "webpack-bundle-analyzer": "^4.9.0",
+        "webpack-ext-reloader-mv3": "^2.1.1",
+        "webpack-extension-manifest-plugin": "^0.8.0",
+        "zip-webpack-plugin": "^4.0.1"
+    },
+    "devDependencies": {
+        "@tailwindcss/typography": "^0.5.9",
+        "@types/chrome": "^0.0.242",
+        "@types/inboxsdk": "^2.0.10",
+        "@types/jquery": "^3.5.16",
+        "@types/lodash": "^4.14.196",
+        "@types/node": "^20.4.5",
+        "@types/react": "^18.2.18",
+        "@types/react-dom": "^18.2.7",
+        "@types/react-router-dom": "^5.3.3",
+        "@types/redux": "^3.6.31",
+        "@types/webextension-polyfill": "^0.10.1",
+        "@types/webpack-bundle-analyzer": "^4.6.0",
+        "@types/zip-webpack-plugin": "^3.0.3",
+        "@typescript-eslint/eslint-plugin": "^6.2.1",
+        "@typescript-eslint/parser": "^6.2.1",
+        "autoprefixer": "^10.4.15",
+        "cz-conventional-changelog": "^3.3.0",
+        "eslint": "^8.46.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^8.9.0",
+        "eslint-plugin-babel": "^5.3.1",
+        "eslint-plugin-import": "^2.28.0",
+        "eslint-plugin-jsx-a11y": "^6.7.1",
+        "eslint-plugin-prettier": "^5.0.0",
+        "eslint-plugin-react": "^7.33.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-webpack-plugin": "^4.0.1",
+        "postcss": "^8.4.27",
+        "postcss-loader": "^7.3.3",
+        "prettier": "^3.0.0",
+        "semantic-release": "^21.0.7",
+        "tailwindcss": "^3.3.3",
+        "ts-loader": "^9.4.4",
+        "typescript": "^5.1.6",
+        "webpack-cli": "^5.1.4"
+    },
+    "license": "ISC",
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Dun-sin/OpenSourcePal.git"
+    },
+    "release": {
+        "branches": [
+            "main"
+        ]
+    }
 }

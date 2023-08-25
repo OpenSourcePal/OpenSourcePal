@@ -1,9 +1,9 @@
+/* global document */
+
 import React from 'react';
-import '../assets/tailwind.css';
-import pageRoot from '../utils/pageRoot';
+import ReactDOM from 'react-dom/client';
 
-const Options: React.FC = () => {
-	return <p>Options</p>;
-};
+const Index = () => <div>Hello React!</div>;
 
-pageRoot(Options);
+const root = ReactDOM.createRoot(document.getElementById('display-container')!);
+root.render(<Index />);
