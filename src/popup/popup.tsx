@@ -5,16 +5,11 @@ import { Dna } from 'react-loader-spinner';
 import browser from 'webextension-polyfill';
 
 import '../assets/css/tailwind.css';
-import { getUserInfo } from '../utils/api';
-import { error, info, retrieveAccessToken } from 'utils/helper';
+import { error, info, retrieveAccessToken, gettingUserInfo } from 'utils/helper';
+import { UserInfoType } from 'types/User';
 
-type User = {
-    name: string;
-    avatar: string;
-    url: string;
-};
 const Popup: React.FC = () => {
-    const [userInfo, setUserInfo] = useState<User>({
+    const [userInfo, setUserInfo] = useState<UserInfoType>({
         name: '',
         avatar: '',
         url: '',
@@ -27,7 +22,7 @@ const Popup: React.FC = () => {
                 const accessToken = await retrieveAccessToken();
                 setLoading(true);
                 info('AccessToken', accessToken);
-                gettingUserInfo(accessToken);
+                gettingUserInfo(accessToken, setUserInfo, setLoading);
             } catch (error) {
                 error('Get Token', error);
             }
@@ -66,27 +61,13 @@ const Popup: React.FC = () => {
                         setLoading(false);
                         return;
                     }
-                    gettingUserInfo(response.token);
+                    gettingUserInfo(response.token, setUserInfo, setLoading);
                 });
             })
             .catch((error) => {
                 error('Auth', error);
             });
     };
-
-    function gettingUserInfo(token: string) {
-        info('Get User Info Test');
-        getUserInfo(token)
-            .then((data) => {
-                setUserInfo({
-                    name: data.name,
-                    avatar: data.avatar_url,
-                    url: data.hrml_url,
-                });
-                setLoading(false);
-            })
-            .catch((error) => error('Get User', error));
-    }
 
     return (
         <section className="w-80 bg-lightest flex flex-col">

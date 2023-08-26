@@ -1,4 +1,6 @@
 import storage from './storage';
+import { getUserInfo } from './api';
+import { UserInfoType } from 'types/User';
 
 export const retrieveAccessToken = async (): Promise<string> => {
     try {
@@ -7,7 +9,7 @@ export const retrieveAccessToken = async (): Promise<string> => {
         return accessToken;
     } catch (error) {
         // Handle any errors here
-        console.error('Error retrieving access token:', error);
+        error('Error retrieving access token:', error);
         return '';
     }
 };
@@ -27,3 +29,22 @@ export const error = (task: string, error: any) => {
     console.error(`${error}`);
     console.log(`======== ERROR IN ${task} END ========`);
 };
+
+export function gettingUserInfo(
+    token: string,
+    setUserInfo: React.Dispatch<React.SetStateAction<UserInfoType>>,
+    setLoading?: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+    getUserInfo(token)
+        .then((data) => {
+            setUserInfo({
+                name: data.name,
+                avatar: data.avatar_url,
+                url: data.hrml_url,
+            });
+            if (setLoading !== undefined) {
+                setLoading(false);
+            }
+        })
+        .catch((error) => error('Get User', error));
+}
