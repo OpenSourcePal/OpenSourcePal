@@ -1,8 +1,8 @@
 {
-    "name": "OpenSourcePal",
+    "name": "opensourcepal",
     "version": "0.0.0-development",
     "description": "Your Open Source Assistant",
-    "main": "webpack.config.js",
+    "main": "index.js",
     "scripts": {
         "dev:chrome": "cross-env NODE_ENV=development TARGET=chrome webpack",
         "dev:firefox": "cross-env NODE_ENV=development TARGET=firefox webpack",
@@ -25,7 +25,7 @@
         "lint-fix": "eslint --ext js,jsx,ts,tsx, src --fix",
         "semantic-release": "semantic-release"
     },
-    "author": "Dun-sin",
+    "author": "",
     "dependencies": {
         "@iconify/react": "^4.1.1",
         "clean-webpack-plugin": "^4.0.0",

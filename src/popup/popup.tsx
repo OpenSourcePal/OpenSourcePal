@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Icon } from '@iconify/react';
 import { Dna } from 'react-loader-spinner';
@@ -6,6 +6,7 @@ import browser from 'webextension-polyfill';
 
 import '../assets/css/tailwind.css';
 import { getUserInfo } from '../utils/api';
+import { error, info, retrieveAccessToken } from 'utils/helper';
 
 type User = {
     name: string;
@@ -19,6 +20,21 @@ const Popup: React.FC = () => {
         url: '',
     });
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const getToken = async () => {
+            try {
+                const accessToken = await retrieveAccessToken();
+                setLoading(true);
+                info('AccessToken', accessToken);
+                gettingUserInfo(accessToken);
+            } catch (error) {
+                error('Get Token', error);
+            }
+        };
+
+        getToken();
+    }, []);
 
     const authenticateGitHub = () => {
         setLoading(true);
@@ -34,32 +50,43 @@ const Popup: React.FC = () => {
             })
             .then((redirectUrl) => {
                 if (browser.runtime.lastError || !redirectUrl) {
-                    console.error('Error during GitHub authentication');
+                    error('redirectURL', 'Error during GitHub authentication');
                     setLoading(false);
                     return;
                 }
 
                 const code = new URLSearchParams(new URL(redirectUrl).search).get('code');
                 if (!code) {
-                    console.error('GitHub authentication failed');
+                    error('Code', 'GitHub authentication failed');
                     setLoading(false);
                     return;
                 }
                 browser.runtime.sendMessage({ action: 'AUTH_CODE_RECEIVED', code }).then((response) => {
-                    getUserInfo(response.token).then((data) => {
-                        setUserInfo({
-                            name: data.name,
-                            avatar: data.avatar_url,
-                            url: data.hrml_url,
-                        });
+                    if (response.success === false) {
                         setLoading(false);
-                    });
+                        return;
+                    }
+                    gettingUserInfo(response.token);
                 });
             })
             .catch((error) => {
-                console.error(error);
+                error('Auth', error);
             });
     };
+
+    function gettingUserInfo(token: string) {
+        info('Get User Info Test');
+        getUserInfo(token)
+            .then((data) => {
+                setUserInfo({
+                    name: data.name,
+                    avatar: data.avatar_url,
+                    url: data.hrml_url,
+                });
+                setLoading(false);
+            })
+            .catch((error) => error('Get User', error));
+    }
 
     return (
         <section className="w-80 bg-lightest flex flex-col">
