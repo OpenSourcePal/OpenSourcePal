@@ -6,7 +6,6 @@ import browser from 'webextension-polyfill';
 
 import '../assets/css/tailwind.css';
 import { error, info, retrieveAccessToken, gettingUserInfo } from 'utils/helper';
-import { UserInfoType } from 'types/User';
 
 const Popup: React.FC = () => {
     const [userInfo, setUserInfo] = useState<UserInfoType>({

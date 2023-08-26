@@ -39,7 +39,7 @@ const onInstalled = ({ reason }: { reason: any }) => {
  * @param sender
  * @returns
  */
-export async function onMessage(message: any, sender: any) {
+export async function onMessage(message: any, sender: Runtime.SendMessageOptionsType) {
     try {
         console.log('[===== Received message =====]', message, sender);
         if (message.action === 'AUTH_CODE_RECEIVED') {

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { runtime } from 'webextension-polyfill';
 
-import { UserInfoType } from 'types/User';
 import { gettingUserInfo, retrieveAccessToken } from 'utils/helper';
 import '../assets/css/tailwind.css';
 
@@ -32,9 +31,11 @@ function Main() {
     );
 }
 
+// check if the url is a repo
 const isRepo = window.location.href.match('https://github.com/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+(/.*)?');
 
 alert(isRepo);
+// attach content if it's a repo
 if (isRepo !== null) {
     const app = document.createElement('div');
     app.id = 'my-extension-root';
