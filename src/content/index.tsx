@@ -26,26 +26,31 @@ function Main() {
         alert('SideBar Opened');
     };
     return (
-        <div className="">
+        <div className=" ">
             <Icon icon="bxs:door-open" className="h-10 w-10 text-mid-light cursor-pointer" onClick={openSideBar} />
         </div>
     );
 }
 
-const app = document.createElement('div');
-app.id = 'my-extension-root';
-app.className = 'absolute right-3 top-16';
+const isRepo = window.location.href.match('https://github.com/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+(/.*)?');
 
-let elementToAttach;
-if (document.body.firstElementChild === undefined || document.body.firstElementChild === null) {
-    elementToAttach = document.body;
-} else {
-    elementToAttach = document.body.firstElementChild;
+alert(isRepo);
+if (isRepo !== null) {
+    const app = document.createElement('div');
+    app.id = 'my-extension-root';
+    app.className = 'absolute right-3 top-28';
+
+    let elementToAttach;
+    if (document.body.firstElementChild === undefined || document.body.firstElementChild === null) {
+        elementToAttach = document.body;
+    } else {
+        elementToAttach = document.body.firstElementChild;
+    }
+
+    elementToAttach.className = 'relative';
+    elementToAttach.appendChild(app);
+
+    const root = createRoot(app);
+
+    root.render(<Main />);
 }
-
-elementToAttach.className = 'relative';
-elementToAttach.appendChild(app);
-
-const root = createRoot(app);
-
-root.render(<Main />);
