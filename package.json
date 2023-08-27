@@ -28,6 +28,7 @@
     "author": "",
     "dependencies": {
         "@iconify/react": "^4.1.1",
+        "@react-spring/web": "^9.7.3",
         "clean-webpack-plugin": "^4.0.0",
         "copy-webpack-plugin": "^11.0.0",
         "core-js": "^3.32.0",

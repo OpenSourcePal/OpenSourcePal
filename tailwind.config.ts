@@ -4,12 +4,9 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                darkest: '#5A200C',
-                dark: '#9E3715',
-                'mid-dark': '#CB471A',
-                'mid-light': '#E56134',
-                light: '#F0A78E',
-                lightest: '#FCEDE8',
+                primary: '#0c0c0d',
+                secondary: '#eceff6',
+                brand: '#da6b15',
             },
             fontSize: {
                 f2xs: 'var(--step--2)',

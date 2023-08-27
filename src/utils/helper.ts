@@ -1,6 +1,5 @@
 import storage from './storage';
 import { getUserInfo } from './api';
-import { UserInfoType } from 'types/User';
 
 export const retrieveAccessToken = async (): Promise<string> => {
     try {
