@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Icon } from '@iconify/react';
 import { runtime } from 'webextension-polyfill';
+import { animated, useSpring } from '@react-spring/web';
 
 import '../assets/css/tailwind.css';
 import { gettingUserInfo, info, retrieveAccessToken } from 'utils/helper';
@@ -13,49 +14,67 @@ function Main() {
         avatar: '',
         url: '',
     });
-    const [isOpen, setIsOpen] = useState(true);
-    useEffect(() => {
-        const getToken = async () => {
-            const accessToken = await retrieveAccessToken();
-            gettingUserInfo(accessToken, setUserInfo);
-        };
-        getToken();
+    const [isOpen, setIsOpen] = useState(false);
+
+    // ALL REFS
+    const mainSideBar = useRef<HTMLDivElement | null>(null);
+
+    // ALL ANIMATIONS
+    const sidebarAnimation = useSpring({
+        transform: isOpen ? 'translateX(0)' : 'translateX(1000%)',
+        onStart: () => {
+            if (mainSideBar.current === null) return;
+            if (isOpen === false) {
+                mainSideBar.current.style.display = 'none';
+                return;
+            }
+
+            mainSideBar.current.style.display = 'block';
+        },
     });
 
+    (async () => {
+        const accessToken = await retrieveAccessToken();
+        gettingUserInfo(accessToken, setUserInfo);
+    })();
+
     const openSideBar = () => {
-        alert('opensidebar');
+        info('opensidebar');
         setIsOpen(true);
     };
 
     const closeSideBar = () => {
-        alert('closesidebar');
+        info('closesidebar');
         setIsOpen(false);
     };
+
     return (
         <>
             {!isOpen && (
                 <Icon
-                    icon="material-symbols:lock-open"
-                    className="h-10 w-10 text-mid-light cursor-pointer"
+                    icon="tabler:layout-sidebar-right-expand-filled"
+                    className="h-6 w-6 text-secondary cursor-pointer"
                     onClick={openSideBar}
                 />
             )}
 
-            {isOpen && (
-                <main className="w-screen md:w-[500px] h-screen bg-lightest p-4">
-                    <header className="flex justify-between items-center">
-                        <Icon
-                            icon="material-symbols:lock"
-                            className="h-10 w-10 text-mid-light cursor-pointer"
-                            onClick={closeSideBar}
-                        />
-                        <div className="flex items-center">
-                            <img src={userInfo.avatar} alt={userInfo.name} className="rounded-full h-10 w-10" />
-                            <h2 className="text-fsm text-black">{userInfo.name}</h2>
-                        </div>
-                    </header>
-                </main>
-            )}
+            <animated.main
+                className="w-screen md:w-[400px] h-screen bg-primary px-2 pb-2 pt-1 text-secondary hidden"
+                style={sidebarAnimation}
+                ref={mainSideBar}
+            >
+                <header className="flex justify-between items-center">
+                    <Icon
+                        icon="tabler:layout-sidebar-left-expand-filled"
+                        className="h-6 w-6 text-secondary cursor-pointer"
+                        onClick={closeSideBar}
+                    />
+                    <div className="flex items-center">
+                        <img src={userInfo.avatar} alt={userInfo.name} className="rounded-full h-8 w-8" />
+                        <h2 className="text-fsm">{userInfo.name}</h2>
+                    </div>
+                </header>
+            </animated.main>
         </>
     );
 }
