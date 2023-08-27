@@ -47,3 +47,12 @@ export function gettingUserInfo(
         })
         .catch((error) => error('Get User', error));
 }
+
+export function extractRepoNameFromUrl(url: string): string | null {
+    const matches = url.match(/\/([^/]+)\/?$/);
+    if (matches && matches[1]) {
+        return matches[1];
+    } else {
+        return null;
+    }
+}

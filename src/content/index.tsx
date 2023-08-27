@@ -6,7 +6,7 @@ import { runtime } from 'webextension-polyfill';
 import { animated, useSpring } from '@react-spring/web';
 
 import '../assets/css/tailwind.css';
-import { gettingUserInfo, info, retrieveAccessToken } from 'utils/helper';
+import { extractRepoNameFromUrl, gettingUserInfo, info, retrieveAccessToken } from 'utils/helper';
 
 function Main() {
     const [userInfo, setUserInfo] = useState<UserInfoType>({
@@ -33,18 +33,20 @@ function Main() {
         },
     });
 
-    (async () => {
-        const accessToken = await retrieveAccessToken();
-        gettingUserInfo(accessToken, setUserInfo);
-    })();
+    useEffect(() => {
+        (async () => {
+            info('repoName', extractRepoNameFromUrl(window.location.href));
+            const accessToken = await retrieveAccessToken();
+            info('token', accessToken);
+            gettingUserInfo(accessToken, setUserInfo);
+        })();
+    }, []);
 
     const openSideBar = () => {
-        info('opensidebar');
         setIsOpen(true);
     };
 
     const closeSideBar = () => {
-        info('closesidebar');
         setIsOpen(false);
     };
 
