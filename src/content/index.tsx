@@ -33,7 +33,7 @@ function Main() {
         },
     });
 
-    useEffect(() => {
+  useEffect(() => {
         (async () => {
             info('repoName', extractRepoNameFromUrl(window.location.href));
             const accessToken = await retrieveAccessToken();
