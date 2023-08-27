@@ -70,30 +70,23 @@ const Popup: React.FC = () => {
 
     return (
         <section className="w-80 bg-lightest flex flex-col">
-            <header className="flex flex-col bg-dark py-2 px-4 text-lightest">
+            <header className="flex flex-col bg-primary py-2 px-4 text-secondary">
                 <h1 className="text-flg font-bold">Open Source Pal</h1>
                 <h2 className="text-base font-bold -mt-2">Your Open Source Assistant</h2>
             </header>
             {loading ? (
                 <div className="w-full flex justify-center items-center">
-                    <Dna
-                        visible={true}
-                        height="80"
-                        width="80"
-                        ariaLabel="dna-loading"
-                        wrapperStyle={{ fill: 'rgb(203, 71, 26)' }}
-                        wrapperClass="dna-wrapper"
-                    />
+                    <Dna visible={true} height="80" width="80" ariaLabel="dna-loading" wrapperClass="dna-wrapper" />
                 </div>
             ) : (
                 <main className="w-full p-4">
                     {userInfo.name === '' ? (
                         <span className="w-full flex justify-center items-center">
                             <button
-                                className="h-12 p-2 bg-mid-dark rounded flex gap-1 text-lightest items-center justify-center"
+                                className="h-12 p-2 bg-brand rounded flex gap-1 text-lightest items-center justify-center"
                                 onClick={authenticateGitHub}
                             >
-                                <Icon icon="devicon:github" className="h-6 w-6 text-lightest" />
+                                <Icon icon="devicon:github" className="h-6 w-6 text-secondary" />
                                 <span>Connect Your GitHub</span>
                             </button>
                         </span>
