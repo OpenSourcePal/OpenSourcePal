@@ -4,7 +4,6 @@ import { Icon } from '@iconify/react';
 import { Dna } from 'react-loader-spinner';
 import browser from 'webextension-polyfill';
 
-import '../assets/css/tailwind.css';
 import { error, info, retrieveAccessToken, gettingUserInfo } from 'utils/helper';
 
 const Popup: React.FC = () => {
