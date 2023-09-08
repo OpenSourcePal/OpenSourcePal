@@ -1,5 +1,6 @@
 declare type UserInfoType = {
-    name: string;
-    avatar: string;
-    url: string;
+	name: string;
+	avatar: string;
+	url: string;
+	email?: string;
 };

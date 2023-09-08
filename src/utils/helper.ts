@@ -13,6 +13,16 @@ export const retrieveAccessToken = async (): Promise<string> => {
 	}
 };
 
+export const deleteAccessToken = async (): Promise<void> => {
+	try {
+		// Use the storage object to remove the access token
+		await storage.remove('accessToken');
+	} catch (error) {
+		// Handle any errors here
+		console.error('Error deleting access token:', error);
+	}
+};
+
 export const info = (task: string, data?: any) => {
 	task = `'${task.toUpperCase()}'`;
 	if (data === undefined) {
@@ -20,13 +30,13 @@ export const info = (task: string, data?: any) => {
 		return;
 	}
 	console.log(`======== INFO FROM ${task} START ========`);
-	console.log(`${data}`);
+	console.log(data);
 	console.log(`======== INFO FROM ${task} END ========`);
 };
 
 export const error = (task: string, error: any) => {
 	console.log(`======== ERROR IN ${task} START ========`);
-	console.error(`${error}`);
+	console.error(error);
 	console.log(`======== ERROR IN ${task} END ========`);
 };
 
@@ -34,10 +44,11 @@ export function gettingUserInfo(token: string, setUserInfo: React.Dispatch<React
 	getUserInfo(token)
 		.then((data) => {
 			setUserInfo({
-				name: data.name,
+				name: data.login,
 				avatar: data.avatar_url,
-				url: data.hrml_url,
+				url: data.html_url,
 			});
+
 			if (setLoading !== undefined) {
 				setLoading(false);
 			}
