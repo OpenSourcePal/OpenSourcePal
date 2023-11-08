@@ -56,7 +56,9 @@ export function gettingUserInfo(token: string, setUserInfo: React.Dispatch<React
 		.catch((error) => error('Get User', error));
 }
 
-export function extractRepoNameFromUrl(url: string): string | null {
+export function extractDetailsFromUrl(type: 'repo' | 'owner', url?: string): string | null {
+	url = url === undefined ? window.location.pathname : url;
 	url = url.slice(1);
-	return url.split('/')[1];
+	const splited = url.split('/');
+	return type === 'repo' ? splited[1] : type === 'owner' ? splited[0] : null;
 }

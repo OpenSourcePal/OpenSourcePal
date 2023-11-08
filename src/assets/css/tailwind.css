@@ -25,8 +25,14 @@ body {
         Roboto,
         Oxygen,
         Ubuntu,
-        Cantarell,
+        Cantarell, 
         'Open Sans',
         'Helvetica Neue',
         sans-serif;
 }
+
+.readme h1 {
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+

@@ -9,7 +9,7 @@ import { animated, useSpring } from '@react-spring/web';
 
 // LOCAL
 import '../assets/css/tailwind.css';
-import { gettingUserInfo, info, retrieveAccessToken } from 'utils/helper';
+import { gettingUserInfo, retrieveAccessToken } from 'utils/helper';
 
 // COMPONENTS
 import Repo from './components/Repo';
@@ -58,7 +58,11 @@ function Main() {
 		<>
 			{!isOpen && <Icon icon="tabler:layout-sidebar-right-expand-filled" className="h-6 w-6 text-secondary cursor-pointer" onClick={openSideBar} />}
 
-			<animated.main className="w-screen md:w-[400px] h-screen bg-primary px-3 py-4 text-secondary hidden flex-col gap-4" style={sidebarAnimation} ref={mainSideBar}>
+			<animated.main
+				className="w-screen max-w-[350px] md:w-[400px] md:max-w-[500px] h-screen bg-primary px-3 py-4 text-secondary hidden flex-col gap-4 fixed right-0 top-0"
+				style={sidebarAnimation}
+				ref={mainSideBar}
+			>
 				<header className="flex justify-between items-center">
 					<Icon icon="tabler:layout-sidebar-left-expand-filled" className="h-6 w-6 text-secondary cursor-pointer" onClick={closeSideBar} />
 					<div className="flex items-center">
@@ -80,16 +84,13 @@ const isRepo = `https://github.com${window.location.pathname}`.match('https://gi
 if (isRepo !== null) {
 	const app = document.createElement('section');
 	app.id = 'my-extension-root';
-	app.className = 'fixed right-3 top-[7.5rem] z-30';
+	app.className = 'z-30 relative';
 
-	let elementToAttach;
-	if (document.body.firstElementChild === undefined || document.body.firstElementChild === null) {
+	let elementToAttach = document.querySelector('body .AppHeader-globalBar-end');
+	if (elementToAttach === null) {
 		elementToAttach = document.body;
-	} else {
-		elementToAttach = document.body.firstElementChild;
 	}
 
-	elementToAttach.className = 'relative';
 	elementToAttach.appendChild(app);
 
 	const root = createRoot(app);
