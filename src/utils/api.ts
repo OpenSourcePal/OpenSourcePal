@@ -1,4 +1,4 @@
-import { error, extractDetailsFromUrl } from './helper';
+import { error, extractDetailsFromUrl, info } from './helper';
 
 const BASE_URL = 'https://api.github.com';
 
@@ -18,7 +18,7 @@ export const getUserInfo = async (accessToken: string) => {
 	}
 };
 
-export async function sendUserToServer(userData: UserInfoType) {
+export const sendUserToServer = async (userData: UserInfoType) => {
 	const response = await fetch(`${process.env.SeverURL}/api/user/addUser`, {
 		method: 'POST',
 		headers: {
@@ -34,7 +34,7 @@ export async function sendUserToServer(userData: UserInfoType) {
 	} else {
 		error(`couldn't add users`, data.message);
 	}
-}
+};
 
 export const getUserAssignedIssues = async (accessToken: string) => {
 	try {
@@ -64,7 +64,10 @@ export const getUserAssignedIssues = async (accessToken: string) => {
 
 export const isRepoStarred = async (accessToken: string) => {
 	try {
-		const response = await fetch(`${BASE_URL}/user/starred/${extractDetailsFromUrl('owner')}/${extractDetailsFromUrl('repo')}`, {
+		const owner = extractDetailsFromUrl('owner');
+		const repo = extractDetailsFromUrl('repo');
+
+		const response = await fetch(`${BASE_URL}/user/starred/${owner}/${repo}`, {
 			headers: {
 				Accept: 'application/vnd.github+json',
 				Authorization: `Bearer ${accessToken}`,
@@ -73,11 +76,38 @@ export const isRepoStarred = async (accessToken: string) => {
 
 		if (response.status === 204) {
 			return true;
-		} else {
+		} else if (response.status === 404) {
 			return false;
 		}
 	} catch (error) {
 		error('Error gettings stars:', error);
 		return null;
+	}
+};
+
+export const getIssueInfo = async (accessToken: string, issueNumber: number) => {
+	try {
+		const owner = extractDetailsFromUrl('owner');
+		const repo = extractDetailsFromUrl('repo');
+
+		const response = await fetch(`${BASE_URL}/repos/${owner}/${repo}/issues/${issueNumber}`, {
+			headers: {
+				Accept: 'application/vnd.github+json',
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+
+		const data = await response.json();
+
+		if (response.status === 200) {
+			return {
+				issueTitle: data.title,
+				issueBody: data.body,
+			};
+		} else {
+			return null;
+		}
+	} catch (error) {
+		error('Error while getting issue info', error);
 	}
 };

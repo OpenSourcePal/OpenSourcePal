@@ -34,7 +34,7 @@ const Readme: React.FC = () => {
 					{ role: 'system', content: `You are an expert at open source software.` },
 					{
 						role: 'user',
-						content: `Get a summary not more than 400 characters on how to contribute, the tools required to contribute and where to go for essistenial information, keep the results short and in markdown format where needed and make it clean:${getReadContent()}`,
+						content: `Get a summary not more than 400 characters on how to contribute, the tools required to contribute and where to go for essistenial information, keep the results short and in markdown format where needed and make it clean: ${getReadContent()}`,
 					},
 				],
 			});

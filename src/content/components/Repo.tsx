@@ -1,16 +1,42 @@
 import React, { useState, useEffect } from 'react';
 
-import { error, extractDetailsFromUrl, info, retrieveAccessToken } from 'utils/helper';
+import detectChangeUrl from 'detect-url-change';
+import OpenAI from 'openai';
+import Markdown from 'markdown-to-jsx';
+
 import Readme from './Readme';
-import { isRepoStarred, getUserAssignedIssues } from 'utils/api';
+import { error, extractDetailsFromUrl, info, retrieveAccessToken } from 'utils/helper';
+import { isRepoStarred, getUserAssignedIssues, getIssueInfo } from 'utils/api';
+
+type issuesType = {
+	listOfIssues: any[];
+	isIssuesTab: boolean;
+	issueNumber: number;
+	issueTitle: string | null;
+	issueBody: string | null;
+	issueHelp: string | null;
+};
+
+const openai = new OpenAI({
+	apiKey: process.env.OPENAI_API_KEY,
+	dangerouslyAllowBrowser: true,
+});
 
 const Repo: React.FC = () => {
 	const [contentOpened, setContentOpened] = useState({
 		readme: false,
 		contributing: false,
 	});
-	const [issues, setIssues] = useState<any[]>([]);
+	const [{ listOfIssues, isIssuesTab, issueNumber, issueTitle, issueBody, issueHelp }, setIssues] = useState<issuesType>({
+		listOfIssues: [],
+		isIssuesTab: false,
+		issueNumber: NaN,
+		issueTitle: null,
+		issueBody: null,
+		issueHelp: null,
+	});
 	const [isStarred, setIsStarred] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const openContent = (content: 'readme' | 'contributing') => {
 		if (content === 'readme') {
@@ -22,22 +48,22 @@ const Repo: React.FC = () => {
 
 	useEffect(() => {
 		(async () => {
+			// get issues
 			try {
 				const accessToken = await retrieveAccessToken();
 				if (accessToken === '') return;
-				const issues = await getUserAssignedIssues(accessToken);
+				const listIssues = await getUserAssignedIssues(accessToken);
 
-				if (!issues) {
-					setIssues([]);
+				if (!listIssues) {
+					setIssues((prevIssues) => ({ ...prevIssues, listOfIssues: [] }));
 				} else {
-					setIssues(issues);
+					setIssues((prevIssues) => ({ ...prevIssues, listOfIssues: listIssues }));
 				}
 			} catch (err) {
 				error('getting issues', err);
 			}
-		})();
 
-		(async () => {
+			// check if user stared it
 			try {
 				const accessToken = await retrieveAccessToken();
 				if (accessToken === '') return;
@@ -47,7 +73,62 @@ const Repo: React.FC = () => {
 				error('error  issues', error);
 			}
 		})();
+
+		const checkUrlChange = (newUrl: string) => {
+			const url = newUrl.split('https://github.com');
+
+			const splittedUrl = url[1].split('/')[3];
+			const hasIssueNumber = Number(url[1].split('/')[4]);
+
+			if (splittedUrl === 'issues' && !Number.isNaN(hasIssueNumber)) {
+				setIssues((prevIssues) => ({ ...prevIssues, isIssuesTab: true }));
+				setIssues((prevIssues) => ({ ...prevIssues, issueNumber: hasIssueNumber }));
+			} else {
+				setIssues((prevIssues) => ({ ...prevIssues, isIssuesTab: false }));
+				setIssues((prevIssues) => ({ ...prevIssues, issueNumber: NaN }));
+			}
+		};
+
+		detectChangeUrl.on('change', checkUrlChange);
+
+		// check on mount
+		const url = window.location.href;
+		checkUrlChange(url);
+
+		return () => {
+			detectChangeUrl.off('change', checkUrlChange);
+		};
 	}, []);
+
+	useEffect(() => {
+		if (!isIssuesTab || Number.isNaN(issueNumber)) return;
+
+		(async () => {
+			const accessToken = await retrieveAccessToken();
+			if (accessToken === '') return;
+			const issueInfo = await getIssueInfo(accessToken, issueNumber);
+
+			setIssues((prevIssues) => ({ ...prevIssues, ...issueInfo }));
+		})();
+	}, [isIssuesTab, issueNumber]);
+
+	const getIssueHelp = async () => {
+		if (!issueTitle && !issueBody && !isIssuesTab) return;
+
+		setLoading(true);
+		const completion = await openai.chat.completions.create({
+			model: 'gpt-3.5-turbo',
+			messages: [
+				{ role: 'system', content: `You are an expert at open source software and software development and I'm a beginner` },
+				{
+					role: 'user',
+					content: `Give me steps for solving this github issue i was assigned to code wise if it's related to coding/programming, if it's not give the general steps to help solve it, the issue title is "${issueTitle}" and the issue body is "${issueBody}", return the result in list form and markdown`,
+				},
+			],
+		});
+		setIssues((prevIssues) => ({ ...prevIssues, issueHelp: completion.choices[0].message.content }));
+		setLoading(false);
+	};
 
 	return (
 		<section className="bg-brand w-full p-3 rounded-md flex flex-col gap-4 overflow-y-auto">
@@ -89,22 +170,41 @@ const Repo: React.FC = () => {
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-1">
-				<h2 className="font-semibold text-lg">Issues You're Assigned</h2>
-				<div className="flex flex-col gap-2">
-					{issues.length !== 0 ? (
-						issues.map((item) => {
-							return (
-								<a href={item.html_url} key={item.node_id}>
-									{item.title}
-								</a>
-							);
-						})
+			{!isIssuesTab && (
+				<div className="flex flex-col gap-1">
+					<h2 className="font-semibold text-lg">Issues You're Assigned</h2>
+					<div className="flex flex-col gap-2">
+						{listOfIssues.length !== 0 ? (
+							listOfIssues.map((item) => {
+								return (
+									<a href={item.html_url} key={item.id}>
+										{item.title}
+									</a>
+								);
+							})
+						) : (
+							<p>You aren't assigned any issues in this repo</p>
+						)}
+					</div>
+				</div>
+			)}
+
+			{isIssuesTab && (
+				<div>
+					<h2 className="font-semibold text-lg">Issue Help</h2>
+					{issueHelp ? (
+						loading ? (
+							<p>Loading</p>
+						) : (
+							<Markdown className="p-2 issue-help">{issueHelp || ''}</Markdown>
+						)
 					) : (
-						<p>You aren't assigned any issues in this repo</p>
+						<button onClick={getIssueHelp} className="px-5 py-2 bg-primary">
+							Get Help
+						</button>
 					)}
 				</div>
-			</div>
+			)}
 		</section>
 	);
 };

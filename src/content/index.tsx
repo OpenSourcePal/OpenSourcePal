@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 // LIBRIES
 import { Icon } from '@iconify/react';
 import { runtime } from 'webextension-polyfill';
+import detectChangeUrl from 'detect-url-change';
 import { animated, useSpring } from '@react-spring/web';
 
 // LOCAL
@@ -77,14 +78,22 @@ function Main() {
 	);
 }
 
-// check if the url is a repo
-const isRepo = `https://github.com${window.location.pathname}`.match('https://github.com/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+(/.*)?');
+function isElementAttached(elementId: string): boolean {
+	const existingElement = document.getElementById(elementId);
+	return existingElement !== null;
+}
 
-// attach content if it's a repo
-if (isRepo !== null) {
+function attachContent() {
+	const elementId = 'open-source-pal';
+
+	// Check if the element is already attached
+	if (isElementAttached(elementId)) {
+		return;
+	}
+
 	const app = document.createElement('section');
-	app.id = 'my-extension-root';
-	app.className = 'z-30 relative';
+	app.id = elementId;
+	app.className = 'z-[200] relative';
 
 	let elementToAttach = document.querySelector('body .AppHeader-globalBar-end');
 	if (elementToAttach === null) {
@@ -97,3 +106,11 @@ if (isRepo !== null) {
 
 	root.render(<Main />);
 }
+
+detectChangeUrl.on('change', (newUrl) => {
+	const isRepo = newUrl.match('https://github.com/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+(/.*)?');
+
+	// check if the url is a repo
+	if (!isRepo) return;
+	attachContent();
+});

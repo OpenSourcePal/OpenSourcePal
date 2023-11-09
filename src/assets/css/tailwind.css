@@ -36,3 +36,20 @@ body {
   font-weight: 800;
 }
 
+.issue-help {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.issue-help ol,
+.issue-help ul {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.issue-help li {
+  margin-left: 2px;
+  margin-right: 2px;
+}
