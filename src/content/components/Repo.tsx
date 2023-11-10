@@ -113,9 +113,11 @@ const Repo: React.FC = () => {
 	}, [isIssuesTab, issueNumber]);
 
 	const getIssueHelp = async () => {
+		// TODO: add proper error messages
 		if (!issueTitle && !issueBody && !isIssuesTab) return;
 
 		setLoading(true);
+		// TODO: check if user is assigned to the issue
 		const completion = await openai.chat.completions.create({
 			model: 'gpt-3.5-turbo',
 			messages: [
