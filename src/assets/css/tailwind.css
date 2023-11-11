@@ -53,3 +53,13 @@ body {
   margin-left: 2px;
   margin-right: 2px;
 }
+
+.resource a {
+  text-decoration: underline;
+  text-decoration-color: rgb(218, 107, 21);
+  text-underline-offset: 3px;
+}
+
+.resource code {
+  border-radius: 0.25rem;
+}

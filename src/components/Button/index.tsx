@@ -1,14 +1,15 @@
 import React from 'react';
 
 export type ButtonProps = {
-    action: (e: any) => void;
-    label: string;
+	action: (e: any) => void;
+	label: any;
+	className?: string;
 };
 
-export const Button = (props: ButtonProps) => (
-    <button className="w-8 h-8 bg-black" onClick={props.action}>
-        {props.label}
-    </button>
+const Button = ({ action, label, className }: ButtonProps) => (
+	<button className={className || 'px-5 py-2 bg-primary rounded'} onClick={action}>
+		{label}
+	</button>
 );
 
 export default Button;

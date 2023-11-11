@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 import detectChangeUrl from 'detect-url-change';
 import OpenAI from 'openai';
-import Markdown from 'markdown-to-jsx';
+import Markdown from 'react-markdown';
 
 import Readme from './Readme';
 import { error, extractDetailsFromUrl, info, retrieveAccessToken } from 'utils/helper';
 import { isRepoStarred, getUserAssignedIssues, getIssueInfo } from 'utils/api';
+import Button from 'components/Button';
 
 type issuesType = {
 	listOfIssues: any[];
@@ -22,7 +23,7 @@ const openai = new OpenAI({
 	dangerouslyAllowBrowser: true,
 });
 
-const Repo: React.FC = () => {
+const Repo: React.FC<{ className: string }> = ({ className }) => {
 	const [contentOpened, setContentOpened] = useState({
 		readme: false,
 		contributing: false,
@@ -133,10 +134,10 @@ const Repo: React.FC = () => {
 	};
 
 	return (
-		<section className="bg-brand w-full p-3 rounded-md flex flex-col gap-4 overflow-y-auto">
+		<section className={'bg-brand w-full p-3 rounded-md flex-col gap-4 overflow-y-auto ' + className}>
 			<div className="flex justify-between items-center">
 				<p>You are contributing to</p>
-				<h2 className="font-semibold text-base">{extractDetailsFromUrl('repo')}</h2>
+				<h2 className="font-semibold text-base text-center">{extractDetailsFromUrl('repo')?.toUpperCase()}</h2>
 			</div>
 
 			<div className="flex flex-col gap-1">
@@ -158,9 +159,7 @@ const Repo: React.FC = () => {
 									Read the "Readme" file
 								</label>
 							</span>
-							<button className="border-none underline underline-offset-2 bg-none text-xs font-normal" onClick={() => openContent('readme')}>
-								Summary
-							</button>
+							<Button className="border-none underline underline-offset-2 bg-none text-xs font-normal" action={() => openContent('readme')} label="Summary" />
 						</div>
 						{/* on click on summary should open a drop down */}
 						{contentOpened.readme && (
@@ -194,17 +193,7 @@ const Repo: React.FC = () => {
 			{isIssuesTab && (
 				<div>
 					<h2 className="font-semibold text-lg">Issue Help</h2>
-					{issueHelp ? (
-						loading ? (
-							<p>Loading</p>
-						) : (
-							<Markdown className="p-2 issue-help">{issueHelp || ''}</Markdown>
-						)
-					) : (
-						<button onClick={getIssueHelp} className="px-5 py-2 bg-primary">
-							Get Help
-						</button>
-					)}
+					{issueHelp ? loading ? <p>Loading</p> : <Markdown className="p-2 issue-help">{issueHelp || ''}</Markdown> : <Button action={getIssueHelp} label="Get Help" />}
 				</div>
 			)}
 		</section>

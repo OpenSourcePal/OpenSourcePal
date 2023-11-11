@@ -6,6 +6,7 @@ import browser from 'webextension-polyfill';
 
 import { error, info, retrieveAccessToken, gettingUserInfo, deleteAccessToken } from 'utils/helper';
 import { sendUserToServer } from 'utils/api';
+import Button from 'components/Button';
 
 const Popup: React.FC = () => {
 	const [userInfo, setUserInfo] = useState<UserInfoType>({
@@ -102,18 +103,21 @@ const Popup: React.FC = () => {
 				<main className="w-full p-4">
 					{userInfo.name === '' ? (
 						<span className="w-full flex justify-center items-center">
-							<button className="h-12 p-2 bg-brand rounded flex gap-1 text-lightest items-center justify-center" onClick={authenticateGitHub}>
-								<Icon icon="devicon:github" className="h-6 w-6 text-secondary" />
-								<span>Connect Your GitHub</span>
-							</button>
+							<Button
+								className="h-12 p-2 bg-brand rounded flex gap-1 text-lightest items-center justify-center"
+								action={authenticateGitHub}
+								label={
+									<>
+										<Icon icon="devicon:github" className="h-6 w-6 text-secondary" />
+										<span>Connect Your GitHub</span>
+									</>
+								}
+							/>
 						</span>
 					) : (
 						<div className="flex justify-between flex-wrap items-center">
 							<h2 className="font-semibold text-fmd">Hello {userInfo.name}👋🏾</h2>
-
-							<button className="p-2 bg-brand rounded flex text-lightest items-center justify-center" onClick={logOut}>
-								<span>LogOut</span>
-							</button>
+							<Button className="p-2 bg-brand rounded flex text-lightest items-center justify-center" action={logOut} label={<span>LogOut</span>} />
 						</div>
 					)}
 				</main>

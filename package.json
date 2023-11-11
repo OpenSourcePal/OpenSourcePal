@@ -38,12 +38,14 @@
 		"detect-url-change": "^1.0.2",
 		"dotenv": "^16.3.1",
 		"html-webpack-plugin": "^5.5.3",
-		"markdown-to-jsx": "^7.3.2",
 		"openai": "^4.0.0",
 		"prop-types": "^15.8.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-loader-spinner": "^5.3.4",
+		"react-markdown": "^9.0.0",
+		"react-syntax-highlighter": "^15.5.0",
+		"rehype-raw": "^7.0.0",
 		"style-loader": "^3.3.3",
 		"terser-webpack-plugin": "^5.3.9",
 		"ts-node": "^10.9.1",
@@ -64,6 +66,7 @@
 		"@types/react": "^18.2.18",
 		"@types/react-dom": "^18.2.7",
 		"@types/react-router-dom": "^5.3.3",
+		"@types/react-syntax-highlighter": "^15.5.10",
 		"@types/redux": "^3.6.31",
 		"@types/webextension-polyfill": "^0.10.1",
 		"@types/webpack-bundle-analyzer": "^4.6.0",
@@ -86,7 +89,7 @@
 		"postcss-loader": "^7.3.3",
 		"prettier": "^3.0.2",
 		"prettier-plugin-tailwindcss": "^0.5.3",
-		"semantic-release": "^21.0.7",
+		"semantic-release": "^21.1.2",
 		"tailwindcss": "^3.3.3",
 		"ts-loader": "^9.4.4",
 		"typescript": "^5.1.6",
@@ -100,7 +103,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Dun-sin/OpenSourcePal.git"
+		"url": "https://github.com/OpenSourcePal/OpenSourcePal.git"
 	},
 	"release": {
 		"branches": [

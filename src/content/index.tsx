@@ -14,6 +14,8 @@ import { gettingUserInfo, retrieveAccessToken } from 'utils/helper';
 
 // COMPONENTS
 import Repo from './components/Repo';
+import Resources from './components/Resources';
+import Button from 'components/Button';
 
 function Main() {
 	const [userInfo, setUserInfo] = useState<UserInfoType>({
@@ -22,6 +24,7 @@ function Main() {
 		url: '',
 	});
 	const [isOpen, setIsOpen] = useState(false);
+	const [openResources, setOpenResources] = useState(false);
 
 	// ALL REFS
 	const mainSideBar = useRef<HTMLDivElement | null>(null);
@@ -72,7 +75,21 @@ function Main() {
 					</div>
 				</header>
 
-				<Repo />
+				{openResources ? (
+					<Resources action={() => setOpenResources(false)} />
+				) : (
+					<Button
+						label={
+							<>
+								<Icon icon="lucide:move-right" />
+								<span>Open Resources</span>
+							</>
+						}
+						action={() => setOpenResources(true)}
+						className="flex gap-2 items-center"
+					/>
+				)}
+				<Repo className={openResources ? 'hidden' : 'flex'} />
 			</animated.main>
 		</>
 	);

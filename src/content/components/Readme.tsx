@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 
 import OpenAI from 'openai';
-import Markdown from 'markdown-to-jsx';
+import Markdown from 'react-markdown';
 
 import { info } from 'utils/helper';
 
