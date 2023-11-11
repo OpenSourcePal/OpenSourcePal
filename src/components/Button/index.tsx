@@ -7,7 +7,7 @@ export type ButtonProps = {
 };
 
 const Button = ({ action, label, className }: ButtonProps) => (
-	<button className={className || 'px-5 py-2 bg-primary rounded'} onClick={action}>
+	<button className={className || 'px-5 py-2 bg-primary rounded text-white'} onClick={action}>
 		{label}
 	</button>
 );

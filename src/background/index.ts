@@ -27,8 +27,8 @@ const onInstalled = ({ reason }: { reason: any }) => {
     console.log('[===== Installed Extension!] =====', reason);
     if (reason === 'install') {
         chrome.tabs.create({
-            url: 'onBoarding.html',
-        });
+			url: 'onBoarding/index.html',
+		});
     }
 };
 

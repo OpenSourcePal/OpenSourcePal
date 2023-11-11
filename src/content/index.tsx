@@ -63,7 +63,7 @@ function Main() {
 			{!isOpen && <Icon icon="tabler:layout-sidebar-right-expand-filled" className="h-6 w-6 text-secondary cursor-pointer" onClick={openSideBar} />}
 
 			<animated.main
-				className="w-screen max-w-[350px] md:w-[400px] md:max-w-[500px] h-screen bg-primary px-3 py-4 text-secondary hidden flex-col gap-4 fixed right-0 top-0"
+				className="w-screen max-w-[350px] md:w-[400px] md:max-w-[500px] h-screen bg-primary px-3 py-4 text-secondary hidden flex-col gap-4 fixed right-0 top-0 main-OSP"
 				style={sidebarAnimation}
 				ref={mainSideBar}
 			>
