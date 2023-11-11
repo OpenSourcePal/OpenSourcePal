@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Icon } from '@iconify/react';
 import { Dna } from 'react-loader-spinner';
 import browser from 'webextension-polyfill';
+import crypto from 'crypto-js';
 
 import { error, info, retrieveAccessToken, gettingUserInfo, deleteAccessToken } from 'utils/helper';
-import { sendUserToServer } from 'utils/api';
 import Button from 'components/Button';
+import keys from 'popup/keys';
+import storage from 'utils/storage';
+
+const secretKey = process.env.SECRET_KEY;
 
 const Popup: React.FC = () => {
 	const [userInfo, setUserInfo] = useState<UserInfoType>({
@@ -15,35 +19,24 @@ const Popup: React.FC = () => {
 		url: '',
 	});
 	const [loading, setLoading] = useState(false);
-	const [isAuthDone, setIsAuthDone] = useState(false);
+	// const [isAuthDone, setIsAuthDone] = useState(false);
+	const [isAllowed, setIsAllowed] = useState(false);
 
-	useEffect(() => {
-		const getToken = async () => {
-			try {
-				const accessToken = await retrieveAccessToken();
-				if (accessToken === '') {
-					setUserInfo({ ...userInfo, name: '' });
-					return;
-				}
+	const keyInput = useRef<HTMLInputElement>(null);
+	const allowAccess = () => {
+		if (keyInput.current?.value === '' || !keyInput.current?.value) return;
 
-				gettingUserInfo(accessToken, setUserInfo, setLoading);
-			} catch (error) {
-				error('Get Token', error);
-			}
-		};
+		const key = keyInput.current?.value;
+		const amIAllowed = keys(key);
+		setIsAllowed(amIAllowed);
 
-		getToken();
-	}, []);
-
-	useEffect(() => {
-		if (!isAuthDone || userInfo.name === '') return;
-
-		(async () => {
-			await sendUserToServer(userInfo);
-
-			setIsAuthDone(false);
-		})();
-	}, [isAuthDone, userInfo]);
+		storage.set({
+			amIAllowed: {
+				value: amIAllowed,
+				key: crypto.AES.encrypt(key, secretKey as string),
+			},
+		});
+	};
 
 	const authenticateGitHub = () => {
 		setLoading(true);
@@ -76,7 +69,7 @@ const Popup: React.FC = () => {
 						return;
 					}
 					gettingUserInfo(response.token, setUserInfo, setLoading);
-					setIsAuthDone(true);
+					// setIsAuthDone(true);
 				});
 			})
 			.catch((error) => {
@@ -88,6 +81,54 @@ const Popup: React.FC = () => {
 		await deleteAccessToken();
 		setUserInfo({ ...userInfo, name: '' });
 	};
+
+	useEffect(() => {
+		if (isAllowed) return;
+		(async () => {
+			try {
+				const result = await storage.get('amIAllowed');
+				const gottenResult = result.amIAllowed || null;
+
+				if (!gottenResult) return;
+
+				const byte = crypto.AES.decrypt(gottenResult.key, secretKey as string);
+				const decrypted = byte.toString(crypto.enc.Utf8);
+				const amIAllowed = keys(decrypted);
+
+				setIsAllowed(amIAllowed);
+			} catch (err) {
+				error('Error getting access', err);
+			}
+		})();
+	}, []);
+
+	useEffect(() => {
+		const getToken = async () => {
+			try {
+				const accessToken = await retrieveAccessToken();
+				if (accessToken === '') {
+					setUserInfo({ ...userInfo, name: '' });
+					return;
+				}
+
+				gettingUserInfo(accessToken, setUserInfo, setLoading);
+			} catch (err) {
+				error('Get Token', err);
+			}
+		};
+
+		getToken();
+	}, []);
+
+	// useEffect(() => {
+	// 	if (!isAuthDone || userInfo.name === '') return;
+
+	// 	(async () => {
+	// 		await sendUserToServer(userInfo);
+
+	// 		setIsAuthDone(false);
+	// 	})();
+	// }, [isAuthDone, userInfo]);
 
 	return (
 		<section className="w-80 bg-lightest flex flex-col">
@@ -101,25 +142,34 @@ const Popup: React.FC = () => {
 				</div>
 			) : (
 				<main className="w-full p-4">
-					{userInfo.name === '' ? (
-						<span className="w-full flex justify-center items-center">
-							<Button
-								className="h-12 p-2 bg-brand rounded flex gap-1 text-lightest items-center justify-center"
-								action={authenticateGitHub}
-								label={
-									<>
-										<Icon icon="devicon:github" className="h-6 w-6 text-secondary" />
-										<span>Connect Your GitHub</span>
-									</>
-								}
-							/>
-						</span>
-					) : (
-						<div className="flex justify-between flex-wrap items-center">
-							<h2 className="font-semibold text-fmd">Hello {userInfo.name}👋🏾</h2>
-							<Button className="p-2 bg-brand rounded flex text-lightest items-center justify-center" action={logOut} label={<span>LogOut</span>} />
+					{!isAllowed && (
+						<div className="flex flex-col gap-3 items-center">
+							<h1>Join Early Access</h1>
+							<input placeholder="Enter Key" type="text" ref={keyInput} />
+							<Button label="Submit" action={() => allowAccess()} />
 						</div>
 					)}
+
+					{isAllowed &&
+						(userInfo.name === '' ? (
+							<span className="w-full flex justify-center items-center">
+								<Button
+									className="h-12 p-2 bg-brand rounded flex gap-1 text-lightest items-center justify-center"
+									action={authenticateGitHub}
+									label={
+										<>
+											<Icon icon="devicon:github" className="h-6 w-6 text-secondary" />
+											<span>Connect Your GitHub</span>
+										</>
+									}
+								/>
+							</span>
+						) : (
+							<div className="flex justify-between flex-wrap items-center">
+								<h2 className="font-semibold text-fmd">Hello {userInfo.name}👋🏾</h2>
+								<Button className="p-2 bg-brand rounded flex text-lightest items-center justify-center" action={logOut} label={<span>LogOut</span>} />
+							</div>
+						))}
 				</main>
 			)}
 		</section>

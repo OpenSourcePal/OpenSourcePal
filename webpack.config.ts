@@ -21,51 +21,51 @@ import {
 } from './webpack.config.utils';
 
 let generalConfig: any = {
-    mode: config.NODE_ENV === 'production' || config.NODE_ENV === 'upload' ? 'production' : 'development',
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx|ts|tsx)$/,
-                use: [
-                    {
-                        loader: 'ts-loader',
-                        // options: {
-                        //     transpileOnly: true,
-                        // },
-                    },
-                ],
-                exclude: /node_modules/,
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            postcssOptions: {
-                                ident: 'postcss',
-                                plugins: [tailwindcss, autoprefixer],
-                            },
-                        },
-                    },
-                ],
-            },
-            {
-                test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                type: 'asset/resource',
-            },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+	mode: config.NODE_ENV === 'production' || config.NODE_ENV === 'upload' ? 'production' : 'development',
+	module: {
+		rules: [
+			{
+				test: /\.(js|jsx|ts|tsx)$/,
+				use: [
+					{
+						loader: 'ts-loader',
+						// options: {
+						//     transpileOnly: true,
+						// },
+					},
+				],
+				exclude: /node_modules/,
+			},
+			{
+				test: /\.css$/,
+				use: [
+					'style-loader',
+					'css-loader',
+					{
+						loader: 'postcss-loader',
+						options: {
+							postcssOptions: {
+								ident: 'postcss',
+								plugins: [tailwindcss, autoprefixer],
+							},
+						},
+					},
+				],
+			},
+			{
+				test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+				type: 'asset/resource',
+			},
+			{
+				test: /\.(woff|woff2|eot|ttf|otf)$/i,
 
-                type: 'asset/resource',
-            },
-        ],
-    },
-    resolve: getResolves(),
-    entry: getEntry(Directories.SRC_DIR),
-    output: getOutput(config.TARGET, config.OUTPUT_DIR),
+				type: 'asset/resource',
+			},
+		],
+	},
+	resolve: getResolves(),
+	entry: getEntry(Directories.SRC_DIR),
+	output: getOutput(config.TARGET, config.OUTPUT_DIR),
 };
 
 let plugins: any[] = [

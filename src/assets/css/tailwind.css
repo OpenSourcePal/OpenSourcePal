@@ -63,3 +63,40 @@ body {
 .resource code {
   border-radius: 0.25rem;
 }
+
+/* Firefox */
+.main-OSP * {
+  scrollbar-width: thin;
+  scrollbar-color: #DA6B15 #ECEFF6;
+}
+
+/* Chrome, Edge and Safari */
+.main-OSP *::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.main-OSP *::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background-color: #ECEFF6;
+}
+
+.main-OSP *::-webkit-scrollbar-track:hover {
+  background-color: #E3EDEF;
+}
+
+.main-OSP *::-webkit-scrollbar-track:active {
+  background-color: #DFE9EB;
+}
+
+.main-OSP *::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #DA6B15;
+}
+
+.main-OSP *::-webkit-scrollbar-thumb:hover {
+  background-color: #DA6B15;
+}
+
+.main-OSP *::-webkit-scrollbar-thumb:active {
+  background-color: #DA6B15;
+}

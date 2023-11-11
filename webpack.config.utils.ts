@@ -61,30 +61,29 @@ const EnvConfig: EnvironmentConfig = {
  * @param sourceDir
  * @returns
  */
-export const getHTMLPlugins = (
-    browserDir: string,
-    outputDir = Directories.DEV_DIR,
-    sourceDir = Directories.SRC_DIR,
-) => [
-    new HtmlWebpackPlugin({
-        title: 'Popup',
-        filename: path.resolve(__dirname, `${outputDir}/${browserDir}/popup/index.html`),
-        template: path.resolve(__dirname, `${sourceDir}/popup/index.html`),
-        chunks: ['popup'],
-    }),
-    new HtmlWebpackPlugin({
-        title: 'Options',
-        filename: path.resolve(__dirname, `${outputDir}/${browserDir}/options/index.html`),
-        template: path.resolve(__dirname, `${sourceDir}/options/index.html`),
-        chunks: ['options'],
-    }),
-    new HtmlWebpackPlugin({
-        title: 'OnBoarding',
-        filename: path.resolve(__dirname, `${outputDir}/${browserDir}/onBoarding/index.html`),
-        template: path.resolve(__dirname, `${sourceDir}/onBoarding/index.html`),
-        chunks: ['onBoarding'],
-    }),
-];
+export const getHTMLPlugins = (browserDir: string, outputDir = Directories.DEV_DIR, sourceDir = Directories.SRC_DIR) => {
+	const html = [
+		new HtmlWebpackPlugin({
+			title: 'Popup',
+			filename: path.resolve(__dirname, `${outputDir}/${browserDir}/popup/index.html`),
+			template: path.resolve(__dirname, `${sourceDir}/popup/index.html`),
+			chunks: ['popup'],
+		}),
+		new HtmlWebpackPlugin({
+			title: 'Options',
+			filename: path.resolve(__dirname, `${outputDir}/${browserDir}/options/index.html`),
+			template: path.resolve(__dirname, `${sourceDir}/options/index.html`),
+			chunks: ['options'],
+		}),
+		new HtmlWebpackPlugin({
+			title: 'OnBoarding',
+			filename: path.resolve(__dirname, `${outputDir}/${browserDir}/onBoarding/index.html`),
+			template: path.resolve(__dirname, `${sourceDir}/onBoarding/index.html`),
+			chunks: ['onBoarding'],
+		}),
+	];
+	return html;
+};
 
 /**
  * Get DefinePlugins

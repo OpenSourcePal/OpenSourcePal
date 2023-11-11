@@ -3,7 +3,7 @@ name: Upload Built files
 on:
     push:
         branches:
-            - master
+            - main
 
 jobs:
     upload:
