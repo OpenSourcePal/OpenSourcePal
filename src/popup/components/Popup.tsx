@@ -5,10 +5,11 @@ import { Dna } from 'react-loader-spinner';
 import browser from 'webextension-polyfill';
 import crypto from 'crypto-js';
 
-import { error, info, retrieveAccessToken, gettingUserInfo, deleteAccessToken } from 'utils/helper';
+import { error, retrieveAccessToken, deleteAccessToken } from 'utils/helper';
 import Button from 'components/Button';
 import keys from 'popup/keys';
 import storage from 'utils/storage';
+import { getUserInfo } from 'utils/api';
 
 const secretKey = process.env.SECRET_KEY;
 
@@ -63,13 +64,12 @@ const Popup: React.FC = () => {
 					setLoading(false);
 					return;
 				}
-				browser.runtime.sendMessage({ action: 'AUTH_CODE_RECEIVED', code }).then((response) => {
+				browser.runtime.sendMessage({ action: 'AUTH_CODE_RECEIVED', code }).then(async (response) => {
 					if (response.success === false) {
 						setLoading(false);
 						return;
 					}
-					gettingUserInfo(response.token, setUserInfo, setLoading);
-					// setIsAuthDone(true);
+					await gettingUserInfo();
 				});
 			})
 			.catch((error) => {
@@ -80,6 +80,28 @@ const Popup: React.FC = () => {
 	const logOut = async () => {
 		await deleteAccessToken();
 		setUserInfo({ ...userInfo, name: '' });
+	};
+
+	const gettingUserInfo = async () => {
+		setLoading(true);
+		try {
+			const accessToken = await retrieveAccessToken();
+			if (accessToken === '') {
+				setUserInfo({ ...userInfo, name: '' });
+				setLoading(false);
+				return;
+			}
+			const data = await getUserInfo(accessToken);
+			setUserInfo({
+				name: data.login,
+				avatar: data.avatar_url,
+				url: data.html_url,
+			});
+			setLoading(false);
+		} catch (error) {
+			console.error('Get User', error);
+			setLoading(false);
+		}
 	};
 
 	useEffect(() => {
@@ -103,32 +125,10 @@ const Popup: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
-		const getToken = async () => {
-			try {
-				const accessToken = await retrieveAccessToken();
-				if (accessToken === '') {
-					setUserInfo({ ...userInfo, name: '' });
-					return;
-				}
-
-				gettingUserInfo(accessToken, setUserInfo, setLoading);
-			} catch (err) {
-				error('Get Token', err);
-			}
-		};
-
-		getToken();
+		(async () => {
+			await gettingUserInfo();
+		})();
 	}, []);
-
-	// useEffect(() => {
-	// 	if (!isAuthDone || userInfo.name === '') return;
-
-	// 	(async () => {
-	// 		await sendUserToServer(userInfo);
-
-	// 		setIsAuthDone(false);
-	// 	})();
-	// }, [isAuthDone, userInfo]);
 
 	return (
 		<section className="w-80 bg-lightest flex flex-col">

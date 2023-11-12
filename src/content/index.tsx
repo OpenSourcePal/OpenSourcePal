@@ -4,18 +4,20 @@ import React, { useEffect, useRef, useState } from 'react';
 
 // LIBRIES
 import { Icon } from '@iconify/react';
-import { runtime } from 'webextension-polyfill';
+
 import detectChangeUrl from 'detect-url-change';
 import { animated, useSpring } from '@react-spring/web';
+import { Dna } from 'react-loader-spinner';
 
 // LOCAL
 import '../assets/css/tailwind.css';
-import { gettingUserInfo, retrieveAccessToken } from 'utils/helper';
+import { retrieveAccessToken } from 'utils/helper';
 
 // COMPONENTS
 import Repo from './components/Repo';
 import Resources from './components/Resources';
 import Button from 'components/Button';
+import { getUserInfo } from 'utils/api';
 
 function Main() {
 	const [userInfo, setUserInfo] = useState<UserInfoType>({
@@ -25,6 +27,7 @@ function Main() {
 	});
 	const [isOpen, setIsOpen] = useState(false);
 	const [openResources, setOpenResources] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	// ALL REFS
 	const mainSideBar = useRef<HTMLDivElement | null>(null);
@@ -45,8 +48,25 @@ function Main() {
 
 	useEffect(() => {
 		(async () => {
-			const accessToken = await retrieveAccessToken();
-			gettingUserInfo(accessToken, setUserInfo);
+			setLoading(true);
+			try {
+				const accessToken = await retrieveAccessToken();
+				if (accessToken === '') {
+					setUserInfo({ ...userInfo, name: '' });
+					setLoading(false);
+					return;
+				}
+				const data = await getUserInfo(accessToken);
+				setUserInfo({
+					name: data.login,
+					avatar: data.avatar_url,
+					url: data.html_url,
+				});
+				setLoading(false);
+			} catch (error) {
+				console.error('Get User', error);
+				setLoading(false);
+			}
 		})();
 	}, []);
 
@@ -67,29 +87,39 @@ function Main() {
 				style={sidebarAnimation}
 				ref={mainSideBar}
 			>
-				<header className="flex justify-between items-center">
-					<Icon icon="tabler:layout-sidebar-left-expand-filled" className="h-6 w-6 text-secondary cursor-pointer" onClick={closeSideBar} />
-					<div className="flex items-center">
-						<img src={userInfo.avatar} alt={userInfo.name} className="rounded-full h-7 w-7" />
-						<h2 className="text-fsm">{userInfo.name}</h2>
+				{loading ? (
+					<div className="w-full flex justify-center items-center">
+						<Dna visible={true} height="80" width="80" ariaLabel="dna-loading" wrapperClass="dna-wrapper" />
 					</div>
-				</header>
+				) : userInfo.name !== '' ? (
+					<>
+						<header className="flex justify-between items-center">
+							<Icon icon="tabler:layout-sidebar-left-expand-filled" className="h-6 w-6 text-secondary cursor-pointer" onClick={closeSideBar} />
+							<div className="flex items-center">
+								<img src={userInfo.avatar} alt={userInfo.name} className="rounded-full h-7 w-7" />
+								<h2 className="text-fsm">{userInfo.name}</h2>
+							</div>
+						</header>
 
-				{openResources ? (
-					<Resources action={() => setOpenResources(false)} />
+						{openResources ? (
+							<Resources action={() => setOpenResources(false)} />
+						) : (
+							<Button
+								label={
+									<>
+										<Icon icon="lucide:move-right" />
+										<span>Open Resources</span>
+									</>
+								}
+								action={() => setOpenResources(true)}
+								className="flex gap-2 items-center"
+							/>
+						)}
+						<Repo className={openResources ? 'hidden' : 'flex'} />
+					</>
 				) : (
-					<Button
-						label={
-							<>
-								<Icon icon="lucide:move-right" />
-								<span>Open Resources</span>
-							</>
-						}
-						action={() => setOpenResources(true)}
-						className="flex gap-2 items-center"
-					/>
+					<p>Please Login by clicking on the Extension's Icon</p>
 				)}
-				<Repo className={openResources ? 'hidden' : 'flex'} />
 			</animated.main>
 		</>
 	);

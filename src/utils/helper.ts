@@ -40,22 +40,6 @@ export const error = (task: string, error: any) => {
 	console.log(`======== ERROR IN ${task} END ========`);
 };
 
-export function gettingUserInfo(token: string, setUserInfo: React.Dispatch<React.SetStateAction<UserInfoType>>, setLoading?: React.Dispatch<React.SetStateAction<boolean>>) {
-	getUserInfo(token)
-		.then((data) => {
-			setUserInfo({
-				name: data.login,
-				avatar: data.avatar_url,
-				url: data.html_url,
-			});
-
-			if (setLoading !== undefined) {
-				setLoading(false);
-			}
-		})
-		.catch((error) => error('Get User', error));
-}
-
 export function extractDetailsFromUrl(type: 'repo' | 'owner', url?: string): string | null {
 	url = url === undefined ? window.location.pathname : url;
 	url = url.slice(1);
