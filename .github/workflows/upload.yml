@@ -13,12 +13,12 @@ jobs:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
-                  node-version: 18.16.0
+                  node-version: 20.0.0
 
             - name: Build
               run: |
-                  yarn install --frozen-lockfile
-                  yarn upload
+                  npm ci
+                  npm run upload
             - name: Uploading Chrome Extension
               uses: actions/upload-artifact@v3
               with:
