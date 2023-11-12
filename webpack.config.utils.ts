@@ -80,6 +80,7 @@ export const getHTMLPlugins = (browserDir: string, outputDir = Directories.DEV_D
 			filename: path.resolve(__dirname, `${outputDir}/${browserDir}/onBoarding/index.html`),
 			template: path.resolve(__dirname, `${sourceDir}/onBoarding/index.html`),
 			chunks: ['onBoarding'],
+			showErrors: true,
 		}),
 	];
 	return html;

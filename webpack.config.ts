@@ -80,20 +80,21 @@ let plugins: any[] = [
 
 if (config.NODE_ENV === 'development') {
     generalConfig = {
-        ...generalConfig,
-        devtool: 'source-map',
-        stats: {
-            all: false,
-            builtAt: true,
-            errors: true,
-            hash: true,
-        },
-        watch: true,
-        watchOptions: {
-            aggregateTimeout: 200,
-            poll: 1000,
-        },
-    };
+		...generalConfig,
+		devtool: 'source-map',
+		stats: {
+			all: false,
+			builtAt: true,
+			errors: true,
+			hash: true,
+			errorDetails: true,
+		},
+		watch: true,
+		watchOptions: {
+			aggregateTimeout: 200,
+			poll: 1000,
+		},
+	};
 
     plugins = [...plugins, ...getExtensionReloaderPlugins()];
 }
