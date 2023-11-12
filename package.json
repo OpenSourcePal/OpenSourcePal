@@ -35,7 +35,6 @@
 		"core-js": "^3.32.0",
 		"cross-env": "^7.0.3",
 		"crypto-js": "^4.2.0",
-		"cryptojs": "^2.5.3",
 		"css-loader": "^6.8.1",
 		"detect-url-change": "^1.0.2",
 		"dotenv": "^16.3.1",

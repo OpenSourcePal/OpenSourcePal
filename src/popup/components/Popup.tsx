@@ -7,11 +7,10 @@ import crypto from 'crypto-js';
 
 import { error, retrieveAccessToken, deleteAccessToken } from 'utils/helper';
 import Button from 'components/Button';
-import keys from 'popup/keys';
 import storage from 'utils/storage';
 import { getUserInfo } from 'utils/api';
 
-const secretKey = process.env.SECRET_KEY;
+const serverurl = process.env.SEVERURL;
 
 const Popup: React.FC = () => {
 	const [userInfo, setUserInfo] = useState<UserInfoType>({
@@ -20,23 +19,16 @@ const Popup: React.FC = () => {
 		url: '',
 	});
 	const [loading, setLoading] = useState(false);
-	// const [isAuthDone, setIsAuthDone] = useState(false);
 	const [isAllowed, setIsAllowed] = useState(false);
 
 	const keyInput = useRef<HTMLInputElement>(null);
-	const allowAccess = () => {
+	const allowAccess = async () => {
 		if (keyInput.current?.value === '' || !keyInput.current?.value) return;
 
 		const key = keyInput.current?.value;
-		const amIAllowed = keys(key);
+		const amIAllowed = await checkIsKeyValid(key);
 		setIsAllowed(amIAllowed);
-
-		storage.set({
-			amIAllowed: {
-				value: amIAllowed,
-				key: crypto.AES.encrypt(key, secretKey as string),
-			},
-		});
+		storage.set({ amIAllowed });
 	};
 
 	const authenticateGitHub = () => {
@@ -79,6 +71,7 @@ const Popup: React.FC = () => {
 
 	const logOut = async () => {
 		await deleteAccessToken();
+		await storage.remove('isAllowed');
 		setUserInfo({ ...userInfo, name: '' });
 	};
 
@@ -96,39 +89,64 @@ const Popup: React.FC = () => {
 				name: data.login,
 				avatar: data.avatar_url,
 				url: data.html_url,
+				email: data.email,
 			});
 			setLoading(false);
-		} catch (error) {
-			console.error('Get User', error);
+		} catch (err) {
+			error('Get User', err);
 			setLoading(false);
 		}
 	};
 
-	useEffect(() => {
-		if (isAllowed) return;
-		(async () => {
-			try {
-				const result = await storage.get('amIAllowed');
-				const gottenResult = result.amIAllowed || null;
+	const checkIsKeyValid = async (key: string) => {
+		if (userInfo.name === '') return false;
+		try {
+			const response = await fetch(`${serverurl}/early/checkkey`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ key, name: userInfo.name }),
+			});
 
-				if (!gottenResult) return;
-
-				const byte = crypto.AES.decrypt(gottenResult.key, secretKey as string);
-				const decrypted = byte.toString(crypto.enc.Utf8);
-				const amIAllowed = keys(decrypted);
-
-				setIsAllowed(amIAllowed);
-			} catch (err) {
-				error('Error getting access', err);
+			console.log('res', response.status);
+			if (response.status === 204) {
+				return true;
+			} else {
+				return false;
 			}
-		})();
-	}, []);
+		} catch (err) {
+			error('checking key', err);
+			return false;
+		}
+	};
 
 	useEffect(() => {
 		(async () => {
 			await gettingUserInfo();
 		})();
 	}, []);
+
+	useEffect(() => {
+		if (userInfo.name === '') return;
+
+		(async () => {
+			try {
+				const response = await fetch(`${serverurl}/user/addUser`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ name: userInfo.name }),
+				});
+
+				const data = await response.json();
+				setIsAllowed(data.message.isAllowed);
+			} catch (err) {
+				error('Adding User', err);
+			}
+		})();
+	}, [userInfo]);
 
 	return (
 		<section className="w-80 bg-lightest flex flex-col">
@@ -142,34 +160,31 @@ const Popup: React.FC = () => {
 				</div>
 			) : (
 				<main className="w-full p-4">
-					{!isAllowed && (
+					{userInfo.name === '' ? (
+						<span className="w-full flex justify-center items-center">
+							<Button
+								className="h-12 p-2 bg-brand rounded flex gap-1 text-lightest items-center justify-center"
+								action={authenticateGitHub}
+								label={
+									<>
+										<Icon icon="devicon:github" className="h-6 w-6 text-secondary" />
+										<span>Connect Your GitHub</span>
+									</>
+								}
+							/>
+						</span>
+					) : isAllowed ? (
+						<div className="flex justify-between flex-wrap items-center">
+							<h2 className="font-semibold text-fmd">Hello {userInfo.name}👋🏾</h2>
+							<Button className="p-2 bg-brand rounded flex text-lightest items-center justify-center" action={logOut} label={<span>LogOut</span>} />
+						</div>
+					) : (
 						<div className="flex flex-col gap-3 items-center">
 							<h1>Join Early Access</h1>
 							<input placeholder="Enter Key" type="text" ref={keyInput} />
 							<Button label="Submit" action={() => allowAccess()} />
 						</div>
 					)}
-
-					{isAllowed &&
-						(userInfo.name === '' ? (
-							<span className="w-full flex justify-center items-center">
-								<Button
-									className="h-12 p-2 bg-brand rounded flex gap-1 text-lightest items-center justify-center"
-									action={authenticateGitHub}
-									label={
-										<>
-											<Icon icon="devicon:github" className="h-6 w-6 text-secondary" />
-											<span>Connect Your GitHub</span>
-										</>
-									}
-								/>
-							</span>
-						) : (
-							<div className="flex justify-between flex-wrap items-center">
-								<h2 className="font-semibold text-fmd">Hello {userInfo.name}👋🏾</h2>
-								<Button className="p-2 bg-brand rounded flex text-lightest items-center justify-center" action={logOut} label={<span>LogOut</span>} />
-							</div>
-						))}
 				</main>
 			)}
 		</section>
