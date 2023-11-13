@@ -1,4 +1,4 @@
-type Section = {
+export type Section = {
 	section: string;
 	resource: {
 		title: string;
