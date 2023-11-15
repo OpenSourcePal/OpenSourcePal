@@ -5,7 +5,7 @@ import OpenAI from 'openai';
 import Markdown from 'react-markdown';
 
 import Readme from './Readme';
-import { error, extractDetailsFromUrl, info, retrieveAccessToken } from 'utils/helper';
+import { error, extractDetailsFromUrl, retrieveAccessToken } from 'utils/helper';
 import { isRepoStarred, getUserAssignedIssues, getIssueInfo } from 'utils/api';
 import Button from 'components/Button';
 
@@ -23,7 +23,7 @@ const openai = new OpenAI({
 	dangerouslyAllowBrowser: true,
 });
 
-const Repo: React.FC<{ className: string }> = ({ className }) => {
+const Repo: React.FC<{ className: string; name: string }> = ({ className, name }) => {
 	const [contentOpened, setContentOpened] = useState({
 		readme: false,
 		contributing: false,
@@ -164,7 +164,7 @@ const Repo: React.FC<{ className: string }> = ({ className }) => {
 						{/* on click on summary should open a drop down */}
 						{contentOpened.readme && (
 							<div className="mt-1 px-3">
-								<Readme />
+								<Readme username={name} closeReadme={() => openContent('readme')} />
 							</div>
 						)}
 					</div>

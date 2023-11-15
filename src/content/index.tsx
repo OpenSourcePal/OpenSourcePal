@@ -121,7 +121,7 @@ function Main() {
 								className="flex gap-2 items-center"
 							/>
 						)}
-						<Repo className={openResources ? 'hidden' : 'flex'} />
+						<Repo className={openResources ? 'hidden' : 'flex'} name={userInfo.name} />
 					</>
 				) : (
 					<p>Please Login by clicking on the Extension's Icon</p>

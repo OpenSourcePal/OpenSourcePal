@@ -1,28 +1,46 @@
 {
-    "name": "__MSG_appName__",
-    "author": "Dun-sin",
-    "manifest_version": 2,
-    "description": "__MSG_appDescription__",
-    "icons": {
-        "16": "assets/icons/icon-16.png",
-        "24": "assets/icons/icon-24.png",
-        "64": "assets/icons/icon-64.png",
-        "128": "assets/icons/icon-128.png"
-    },
-    "default_locale": "en",
-    "content_scripts": [
-        {
-            "matches": ["http://github/*", "https://github/*"],
-            "js": ["content/content.js"]
-        }
-    ],
-    "background": {
-        "scripts": ["background/background.js"]
-    },
-    "permissions": ["<all_urls>"],
-    "browser_specific_settings": {
-        "gecko": {
-            "strict_min_version": "54.0a1"
-        }
-    }
+	"name": "__MSG_appName__",
+	"author": "Dun-sin",
+	"manifest_version": 3,
+	"description": "__MSG_appDescription__",
+	"version": "1.0",
+	"icons": {
+		"16": "assets/icons/icon-16.png",
+		"24": "assets/icons/icon-24.png",
+		"64": "assets/icons/icon-64.png",
+		"128": "assets/icons/icon-128.png"
+	},
+	"default_locale": "en",
+	"content_scripts": [
+		{
+			"matches": ["http://github/*", "https://github/*"],
+			"js": ["content/content.js"]
+		}
+	],
+	"background": {
+		"scripts": ["background/background.js"]
+	},
+	"permissions": ["tabs", "storage", "webNavigation", "identity", "activeTab"],
+	"browser_specific_settings": {
+		"gecko": {
+			"strict_min_version": "54.0a1",
+			"id": "dunsincodes@gmail.com"
+		}
+	},
+	"browser_action": {
+		"default_icon": {
+			"16": "assets/icons/icon-16.png",
+			"24": "assets/icons/icon-24.png",
+			"64": "assets/icons/icon-64.png",
+			"128": "assets/icons/icon-128.png"
+		},
+		"default_title": "Open Source Pal",
+		"default_popup": "popup/index.html"
+	},
+	"web_accessible_resources": [
+		{
+			"resources": ["assets/*", "content/*", "options/*", "popup/*", "background/*", "onBoarding/*"],
+			"matches": ["*://github.com/*"]
+		}
+	]
 }

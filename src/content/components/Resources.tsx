@@ -31,7 +31,7 @@ const Resources = ({ action }: ResourcesProps) => {
 	};
 	return (
 		<div className="flex flex-col gap-6 w-full overflow-y-auto">
-			<div className="flex justify-between items-center w-full">
+			<div className="flex justify-between items-center w-full sticky top-0 bg-primary">
 				<Button
 					action={action}
 					label={

@@ -20,7 +20,7 @@
 	"background": {
 		"service_worker": "background/background.js"
 	},
-	"permissions": ["tabs", "storage", "webNavigation", "identity", "activeTab"],
+	"permissions": ["tabs", "storage", "identity"],
 	"host_permissions": ["https://github.com/"],
 	"options_ui": {
 		"page": "options/index.html"
