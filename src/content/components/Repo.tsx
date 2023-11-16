@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import detectChangeUrl from 'detect-url-change';
 import OpenAI from 'openai';
 import Markdown from 'react-markdown';
+import browser from 'webextension-polyfill';
 
 import Readme from './Readme';
 import { error, extractDetailsFromUrl, retrieveAccessToken } from 'utils/helper';
@@ -23,6 +24,8 @@ const openai = new OpenAI({
 	dangerouslyAllowBrowser: true,
 });
 
+// TODO: add loading messages instead of just loading
+// TODO: add result of issue help to localhost
 const Repo: React.FC<{ className: string; name: string }> = ({ className, name }) => {
 	const [contentOpened, setContentOpened] = useState({
 		readme: false,
@@ -119,6 +122,25 @@ const Repo: React.FC<{ className: string; name: string }> = ({ className, name }
 
 		setLoading(true);
 		// TODO: check if user is assigned to the issue
+		checkLimitAndUpdate();
+	};
+
+	const checkLimitAndUpdate = () => {
+		browser.runtime
+			.sendMessage({ action: 'UPDATE_COUNT', username: name })
+			.then(async (response: boolean) => {
+				if (response) {
+					await setIssueHelp();
+				}
+				setLoading(false);
+			})
+			.catch((err: any) => {
+				error('failed update', err);
+				setLoading(false);
+			});
+	};
+
+	const setIssueHelp = async () => {
 		const completion = await openai.chat.completions.create({
 			model: 'gpt-3.5-turbo',
 			messages: [
@@ -130,7 +152,6 @@ const Repo: React.FC<{ className: string; name: string }> = ({ className, name }
 			],
 		});
 		setIssues((prevIssues) => ({ ...prevIssues, issueHelp: completion.choices[0].message.content }));
-		setLoading(false);
 	};
 
 	return (
@@ -193,7 +214,7 @@ const Repo: React.FC<{ className: string; name: string }> = ({ className, name }
 			{isIssuesTab && (
 				<div>
 					<h2 className="font-semibold text-lg">Issue Help</h2>
-					{issueHelp ? loading ? <p>Loading</p> : <Markdown className="p-2 issue-help">{issueHelp || ''}</Markdown> : <Button action={getIssueHelp} label="Get Help" />}
+					{loading ? <p>Loading</p> : issueHelp ? <Markdown className="p-2 issue-help">{issueHelp || ''}</Markdown> : <Button action={getIssueHelp} label="Get Help" />}
 				</div>
 			)}
 		</section>
