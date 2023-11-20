@@ -8,10 +8,11 @@ import { Icon } from '@iconify/react';
 
 type AccordionProps = {
 	title: string;
-	body: string;
+	body: any;
+	isMarkdown?: boolean;
 };
 
-const Accordion = ({ title, body }: AccordionProps) => {
+const Accordion = ({ title, body, isMarkdown = true }: AccordionProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
@@ -20,21 +21,24 @@ const Accordion = ({ title, body }: AccordionProps) => {
 				<span>{title}</span>
 				<Icon icon={`tabler:${isOpen ? 'minus' : 'plus'}`} />
 			</p>
-			{isOpen && (
-				<div className="bg-secondary px-3 py-1 text-primary">
-					<Markdown
-						className="resource overflow-y-auto"
-						components={{
-							code(props: { [x: string]: any; children: any; className: any; node: any }) {
-								const { children, className, node, ...rest } = props;
-								return <SyntaxHighlighter {...rest} children={String(children).replace(/\n$/, '')} style={coldarkDark} language="bash" wrapLongLines CodeTag="div" />;
-							},
-						}}
-						rehypePlugins={[rehypeRaw]}
-						children={body}
-					/>
-				</div>
-			)}
+			{isOpen &&
+				(isMarkdown ? (
+					<div className="bg-secondary px-3 py-1 text-primary">
+						<Markdown
+							className="resource overflow-y-auto"
+							components={{
+								code(props: { [x: string]: any; children: any; className: any; node: any }) {
+									const { children, className, node, ...rest } = props;
+									return <SyntaxHighlighter {...rest} children={String(children).replace(/\n$/, '')} style={coldarkDark} language="bash" wrapLongLines CodeTag="div" />;
+								},
+							}}
+							rehypePlugins={[rehypeRaw]}
+							children={body}
+						/>
+					</div>
+				) : (
+					<div>{body}</div>
+				))}
 		</div>
 	);
 };

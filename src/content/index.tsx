@@ -16,6 +16,7 @@ import { retrieveAccessToken } from 'utils/helper';
 // COMPONENTS
 import Repo from './components/Repo';
 import Resources from './components/Resources';
+import WalkThrough from './components/WalkThrough';
 import Button from 'components/Button';
 
 import { getUserInfo } from 'utils/api';
@@ -28,7 +29,10 @@ function Main() {
 		url: '',
 	});
 	const [isOpen, setIsOpen] = useState(false);
-	const [openResources, setOpenResources] = useState(false);
+	const [openSection, setSection] = useState({
+		resources: false,
+		walkthrough: false,
+	});
 	const [loading, setLoading] = useState(false);
 	const [isAllowed, setIsAllowed] = useState(false);
 
@@ -107,21 +111,26 @@ function Main() {
 							</div>
 						</header>
 
-						{openResources ? (
-							<Resources action={() => setOpenResources(false)} />
-						) : (
-							<Button
-								label={
-									<>
-										<Icon icon="lucide:move-right" />
-										<span>Open Resources</span>
-									</>
-								}
-								action={() => setOpenResources(true)}
-								className="flex gap-2 items-center"
-							/>
+						{!openSection.resources && !openSection.walkthrough && (
+							<div className="flex items-center justify-between">
+								<Button
+									label={
+										<>
+											<Icon icon="lucide:move-right" />
+											<span>Open Resources</span>
+										</>
+									}
+									action={() => setSection({ resources: true, walkthrough: false })}
+									className="flex gap-2 items-center"
+								/>
+								<Button label="Take a Walkthrough" action={() => setSection({ resources: false, walkthrough: true })} className="bg-brand py-1 px-2 rounded-sm text-secondary" />
+							</div>
 						)}
-						<Repo className={openResources ? 'hidden' : 'flex'} name={userInfo.name} />
+
+						{openSection.walkthrough && <WalkThrough action={() => setSection({ ...openSection, walkthrough: false })} />}
+						{openSection.resources && <Resources action={() => setSection({ ...openSection, resources: false })} />}
+
+						<Repo className={openSection.resources || openSection.walkthrough ? 'hidden' : 'flex'} name={userInfo.name} />
 					</>
 				) : (
 					<p>Please Login by clicking on the Extension's Icon</p>
