@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { Dna } from 'react-loader-spinner';
 import browser from 'webextension-polyfill';
-import crypto from 'crypto-js';
 
 import { error, retrieveAccessToken, deleteAccessToken } from 'utils/helper';
 import Button from 'components/Button';
@@ -18,21 +17,20 @@ const Popup: React.FC = () => {
 		avatar: '',
 		url: '',
 	});
-  const [loading, setLoading] = useState({ auth: false, key: false });
-  const [isAllowed, setIsAllowed] = useState(false);
+	const [loading, setLoading] = useState({ auth: false, key: false });
+	const [isAllowed, setIsAllowed] = useState(false);
 
-  const keyInput = useRef<HTMLInputElement>(null);
-  const allowAccess = async () => {
+	const keyInput = useRef<HTMLInputElement>(null);
+	const allowAccess = async () => {
 		if (keyInput.current?.value === '' || !keyInput.current?.value) return;
 
 		const key = keyInput.current?.value;
 		const amIAllowed = await checkIsKeyValid(key);
 		setIsAllowed(amIAllowed);
-		console.log({ amIAllowed });
 		storage.set({ amIAllowed });
-  };
+	};
 
-  const authenticateGitHub = () => {
+	const authenticateGitHub = () => {
 		setLoading({ ...loading, auth: true });
 
 		const authorizationUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_ID}&redirect_uri=${encodeURIComponent(
@@ -68,15 +66,15 @@ const Popup: React.FC = () => {
 			.catch((error) => {
 				error('Auth', error);
 			});
-  };
+	};
 
-  const logOut = async () => {
+	const logOut = async () => {
 		await deleteAccessToken();
 		await storage.remove('isAllowed');
 		setUserInfo({ ...userInfo, name: '' });
-  };
+	};
 
-  const gettingUserInfo = async () => {
+	const gettingUserInfo = async () => {
 		setLoading({ ...loading, auth: true });
 		try {
 			const accessToken = await retrieveAccessToken();
@@ -97,9 +95,9 @@ const Popup: React.FC = () => {
 			error('Get User', err);
 			setLoading({ ...loading, auth: false });
 		}
-  };
+	};
 
-  const checkIsKeyValid = async (key: string) => {
+	const checkIsKeyValid = async (key: string) => {
 		if (userInfo.name === '') return false;
 		try {
 			const response = await fetch(`${serverurl}/early/checkkey`, {
@@ -120,15 +118,15 @@ const Popup: React.FC = () => {
 			error('checking key', err);
 			return false;
 		}
-  };
+	};
 
-  useEffect(() => {
+	useEffect(() => {
 		(async () => {
 			await gettingUserInfo();
 		})();
-  }, []);
+	}, []);
 
-  useEffect(() => {
+	useEffect(() => {
 		if (userInfo.name === '') return;
 
 		(async () => {
@@ -143,13 +141,14 @@ const Popup: React.FC = () => {
 
 				const data = await response.json();
 				setIsAllowed(data.message.isAllowed);
+				storage.set({ amIAllowed: data.message.isAllowed });
 			} catch (err) {
 				error('Adding User', err);
 			}
 		})();
-  }, [userInfo]);
+	}, [userInfo]);
 
-  return (
+	return (
 		<section className="w-80 bg-lightest flex flex-col">
 			<header className="flex flex-col bg-primary py-2 px-4 text-secondary">
 				<h1 className="text-flg font-bold">Open Source Pal</h1>
@@ -195,7 +194,7 @@ const Popup: React.FC = () => {
 				</main>
 			)}
 		</section>
-  );
+	);
 };
 
 export default Popup;
