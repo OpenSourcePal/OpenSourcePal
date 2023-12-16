@@ -18,21 +18,22 @@ const Popup: React.FC = () => {
 		avatar: '',
 		url: '',
 	});
-	const [loading, setLoading] = useState(false);
-	const [isAllowed, setIsAllowed] = useState(false);
+  const [loading, setLoading] = useState({ auth: false, key: false });
+  const [isAllowed, setIsAllowed] = useState(false);
 
-	const keyInput = useRef<HTMLInputElement>(null);
-	const allowAccess = async () => {
+  const keyInput = useRef<HTMLInputElement>(null);
+  const allowAccess = async () => {
 		if (keyInput.current?.value === '' || !keyInput.current?.value) return;
 
 		const key = keyInput.current?.value;
 		const amIAllowed = await checkIsKeyValid(key);
 		setIsAllowed(amIAllowed);
+		console.log({ amIAllowed });
 		storage.set({ amIAllowed });
-	};
+  };
 
-	const authenticateGitHub = () => {
-		setLoading(true);
+  const authenticateGitHub = () => {
+		setLoading({ ...loading, auth: true });
 
 		const authorizationUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_ID}&redirect_uri=${encodeURIComponent(
 			browser.identity.getRedirectURL('./redirect.html'),
@@ -46,19 +47,19 @@ const Popup: React.FC = () => {
 			.then((redirectUrl) => {
 				if (browser.runtime.lastError || !redirectUrl) {
 					error('redirectURL', 'Error during GitHub authentication');
-					setLoading(false);
+					setLoading({ ...loading, auth: false });
 					return;
 				}
 
 				const code = new URLSearchParams(new URL(redirectUrl).search).get('code');
 				if (!code) {
 					error('Code', 'GitHub authentication failed');
-					setLoading(false);
+					setLoading({ ...loading, auth: false });
 					return;
 				}
 				browser.runtime.sendMessage({ action: 'AUTH_CODE_RECEIVED', code }).then(async (response) => {
 					if (response.success === false) {
-						setLoading(false);
+						setLoading({ ...loading, auth: false });
 						return;
 					}
 					await gettingUserInfo();
@@ -67,21 +68,21 @@ const Popup: React.FC = () => {
 			.catch((error) => {
 				error('Auth', error);
 			});
-	};
+  };
 
-	const logOut = async () => {
+  const logOut = async () => {
 		await deleteAccessToken();
 		await storage.remove('isAllowed');
 		setUserInfo({ ...userInfo, name: '' });
-	};
+  };
 
-	const gettingUserInfo = async () => {
-		setLoading(true);
+  const gettingUserInfo = async () => {
+		setLoading({ ...loading, auth: true });
 		try {
 			const accessToken = await retrieveAccessToken();
 			if (accessToken === '') {
 				setUserInfo({ ...userInfo, name: '' });
-				setLoading(false);
+				setLoading({ ...loading, auth: false });
 				return;
 			}
 			const data = await getUserInfo(accessToken);
@@ -91,14 +92,14 @@ const Popup: React.FC = () => {
 				url: data.html_url,
 				email: data.email,
 			});
-			setLoading(false);
+			setLoading({ ...loading, auth: false });
 		} catch (err) {
 			error('Get User', err);
-			setLoading(false);
+			setLoading({ ...loading, auth: false });
 		}
-	};
+  };
 
-	const checkIsKeyValid = async (key: string) => {
+  const checkIsKeyValid = async (key: string) => {
 		if (userInfo.name === '') return false;
 		try {
 			const response = await fetch(`${serverurl}/early/checkkey`, {
@@ -119,15 +120,15 @@ const Popup: React.FC = () => {
 			error('checking key', err);
 			return false;
 		}
-	};
+  };
 
-	useEffect(() => {
+  useEffect(() => {
 		(async () => {
 			await gettingUserInfo();
 		})();
-	}, []);
+  }, []);
 
-	useEffect(() => {
+  useEffect(() => {
 		if (userInfo.name === '') return;
 
 		(async () => {
@@ -146,15 +147,15 @@ const Popup: React.FC = () => {
 				error('Adding User', err);
 			}
 		})();
-	}, [userInfo]);
+  }, [userInfo]);
 
-	return (
+  return (
 		<section className="w-80 bg-lightest flex flex-col">
 			<header className="flex flex-col bg-primary py-2 px-4 text-secondary">
 				<h1 className="text-flg font-bold">Open Source Pal</h1>
 				<h2 className="text-base font-bold -mt-2">Your Open Source Assistant</h2>
 			</header>
-			{loading ? (
+			{loading.auth ? (
 				<div className="w-full flex justify-center items-center">
 					<Dna visible={true} height="80" width="80" ariaLabel="dna-loading" wrapperClass="dna-wrapper" />
 				</div>
@@ -182,13 +183,19 @@ const Popup: React.FC = () => {
 						<div className="flex flex-col gap-3 items-center">
 							<h1>Join Early Access</h1>
 							<input placeholder="Enter Key" type="text" ref={keyInput} />
-							<Button label="Submit" action={() => allowAccess()} />
+							{loading.key ? (
+								<div className="w-full flex justify-center items-center">
+									<Dna visible={true} height="40" width="40" ariaLabel="dna-loading" wrapperClass="dna-wrapper" />
+								</div>
+							) : (
+								<Button label="Submit" action={() => allowAccess()} />
+							)}
 						</div>
 					)}
 				</main>
 			)}
 		</section>
-	);
+  );
 };
 
 export default Popup;
