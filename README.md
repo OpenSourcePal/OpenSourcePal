@@ -1,4 +1,15 @@
 # Open Source Pal
+### How to Use
+- install it
+  [Chrome Link](https://chromewebstore.google.com/detail/open-source-pal/piplcgelcmkbfjinnbgnkeebenabcjjj), other browsers coming soon
+- click on the icon in your extension list
+  ![image](https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/cdea7705-e152-499c-ace4-ce4724b2f046)
+- sign in to github
+- it will ask for an access code, ask on the [discord](https://discord.gg/ufcysW9q23) server in #-coding-talk channel
+- go to github and go to any project you want to contribute to
+- check for an open icon close to your profile picture for github(if you can't see it, refresh the page)
+  ![image](https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/226c8f1a-e1de-4912-b74d-94c4e5098a78)
+
 ### Run 
 - Fork the repo
 - Clone the repository
