@@ -2,45 +2,48 @@
 ## Open Source Pal is a web extension built to help beginners in tech get into open source.
 
 ## ⚒️ Languages / Tools
-- TypeScript
-- React
-- Tailwind
-- Webextension-polyfill
+1. TypeScript
+2. React
+3. Tailwind
+4. Webextension-polyfill
 
 ## 👇🏽 Prerequisites
 
 Before installation, please make sure you have already installed the following tools:
 
-- [Git](https://git-scm.com/downloads)
-- [NodeJs](https://nodejs.org/en/download/)
+1. [Git](https://git-scm.com/downloads)
+2. [NodeJs](https://nodejs.org/en/download/)
 
 ## How to Use
-- install it
+1. install it
   [Chrome Link](https://chromewebstore.google.com/detail/open-source-pal/piplcgelcmkbfjinnbgnkeebenabcjjj), other browsers coming soon
-- click on the icon in your extension list
+2. click on the icon in your extension list
   ![image](https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/cdea7705-e152-499c-ace4-ce4724b2f046)
-- sign in to github
-- it will ask for an access code, ask on the [discord](https://discord.gg/ufcysW9q23) server in #-coding-talk channel
-- go to github and go to any project you want to contribute to
-- check for an open icon close to your profile picture for github(if you can't see it, refresh the page)
+3. sign in to github
+4. it will ask for an access code, ask on the [discord](https://discord.gg/ufcysW9q23) server in #-coding-talk channel
+5. go to github and go to any project you want to contribute to
+6. check for an open icon close to your profile picture for github(if you can't see it, refresh the page)
   ![image](https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/226c8f1a-e1de-4912-b74d-94c4e5098a78)
 
 ## Contribute
 ### 🛠️ Installation Steps
-- Fork the repo
-- Clone the repository
+1. Fork the repo
+2. Clone the repository
   ```bash
   git clone https://github.com/<your-username>/OpenSourcePal.git
   ```
-- Run
+3. Run
   ```bash
   npm install
   ```
   ```bash
   npm install -g commitizen
   ```
-- Fill in the .env with the .env_sample
-- Run `npm run dev:{the browser you use}` EX: `npm run dev:chrome`
+4. Fill in the .env with the .env_sample
+  > [learn how to get a github id & secret](https://www.youtube.com/watch?v=R9lxXQcy-nM)
+  >> you can leave the openai api key empty
+  >>> for the server url run [the backend code](https://github.com/OpenSourcePal/OSP-backend)
+5. Run `npm run dev:{the browser you use}` EX: `npm run dev:chrome`
   ```bash
   npm run dev:{the browser you use}
   ```
