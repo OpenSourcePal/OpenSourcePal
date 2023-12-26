@@ -70,25 +70,28 @@ export async function onMessage(message: any, sender: Runtime.SendMessageOptions
 			}
 		} else if (message.action === 'UPDATE_COUNT') {
 			const username = message.username;
-			try {
-				const response = await fetch(`${serverurl}/user/updateCount`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ name: username }),
-				});
+      try {
+			const token = await storage.get('token');
+			const response = await fetch(`${serverurl}/user/updateCount`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify({ name: username }),
+			});
 
-				console.log('res', response.status);
-				if (response.status === 204) {
-					return true;
-				} else {
-					return false;
-				}
-			} catch (err) {
-				error('checking limit', err);
+			const data = await response.json();
+			if (response.status === 204) {
+				console.log({ data });
+				return data.isSuccess;
+			} else {
 				return false;
 			}
+		} catch (err) {
+			error('checking limit', err);
+			return false;
+		}
 		}
 	} catch (error) {
 		console.error('[===== Error in MessageListener =====]', error);

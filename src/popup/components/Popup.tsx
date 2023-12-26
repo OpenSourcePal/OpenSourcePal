@@ -140,8 +140,13 @@ const Popup: React.FC = () => {
 				});
 
 				const data = await response.json();
-				setIsAllowed(data.message.isAllowed);
-				storage.set({ amIAllowed: data.message.isAllowed });
+				if (response.ok) {
+					const { message, token } = data;
+					setIsAllowed(message.isAllowed);
+					storage.set({ amIAllowed: message.isAllowed });
+
+					storage.set({ token });
+				}
 			} catch (err) {
 				error('Adding User', err);
 			}
@@ -175,7 +180,7 @@ const Popup: React.FC = () => {
 						</span>
 					) : isAllowed ? (
 						<div className="flex justify-between flex-wrap items-center">
-							<h2 className="font-semibold text-fmd">Hello {userInfo.name}👋🏾</h2>
+							<h2 className="font-semibold text-fmd">Hello {userInfo.name}</h2>
 							<Button className="p-2 bg-brand rounded flex text-lightest items-center justify-center" action={logOut} label={<span>LogOut</span>} />
 						</div>
 					) : (
