@@ -19,18 +19,19 @@ const Popup: React.FC = () => {
 	});
 	const [loading, setLoading] = useState({ auth: false, key: false });
 	const [isAllowed, setIsAllowed] = useState(false);
+  const [systemError, setSystemError] = useState<null | string>(null);
 
-	const keyInput = useRef<HTMLInputElement>(null);
-	const allowAccess = async () => {
+  const keyInput = useRef<HTMLInputElement>(null);
+  const allowAccess = async () => {
 		if (keyInput.current?.value === '' || !keyInput.current?.value) return;
 
 		const key = keyInput.current?.value;
 		const amIAllowed = await checkIsKeyValid(key);
 		setIsAllowed(amIAllowed);
 		storage.set({ amIAllowed });
-	};
+  };
 
-	const authenticateGitHub = () => {
+  const authenticateGitHub = () => {
 		setLoading({ ...loading, auth: true });
 
 		const authorizationUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_ID}&redirect_uri=${encodeURIComponent(
@@ -44,44 +45,39 @@ const Popup: React.FC = () => {
 			})
 			.then((redirectUrl) => {
 				if (browser.runtime.lastError || !redirectUrl) {
-					error('redirectURL', 'Error during GitHub authentication');
-					setLoading({ ...loading, auth: false });
-					return;
+					throw new Error('Error during GitHub authentication');
 				}
 
 				const code = new URLSearchParams(new URL(redirectUrl).search).get('code');
 				if (!code) {
-					error('Code', 'GitHub authentication failed');
-					setLoading({ ...loading, auth: false });
-					return;
+					throw new Error('GitHub authentication failed');
 				}
 				browser.runtime.sendMessage({ action: 'AUTH_CODE_RECEIVED', code }).then(async (response) => {
 					if (response.success === false) {
-						setLoading({ ...loading, auth: false });
-						return;
+						throw new Error('No auth code was recieved');
 					}
 					await gettingUserInfo();
 				});
 			})
 			.catch((error) => {
+				setLoading({ ...loading, auth: false });
 				error('Auth', error);
+				setSystemError(`Oops, couldn't authenticate user, pls try again or contact support`);
 			});
-	};
+  };
 
-	const logOut = async () => {
+  const logOut = async () => {
 		await deleteAccessToken();
 		await storage.remove('isAllowed');
 		setUserInfo({ ...userInfo, name: '' });
-	};
+  };
 
-	const gettingUserInfo = async () => {
+  const gettingUserInfo = async () => {
 		setLoading({ ...loading, auth: true });
 		try {
 			const accessToken = await retrieveAccessToken();
 			if (accessToken === '') {
-				setUserInfo({ ...userInfo, name: '' });
-				setLoading({ ...loading, auth: false });
-				return;
+				throw new Error('No access token');
 			}
 			const data = await getUserInfo(accessToken);
 			setUserInfo({
@@ -90,14 +86,16 @@ const Popup: React.FC = () => {
 				url: data.html_url,
 				email: data.email,
 			});
-			setLoading({ ...loading, auth: false });
 		} catch (err) {
+			setUserInfo({ ...userInfo, name: '' });
+			setSystemError('Something went wrong while fetching user info');
 			error('Get User', err);
+		} finally {
 			setLoading({ ...loading, auth: false });
 		}
-	};
+  };
 
-	const checkIsKeyValid = async (key: string) => {
+  const checkIsKeyValid = async (key: string) => {
 		if (userInfo.name === '') return false;
 		try {
 			const response = await fetch(`${serverurl}/early/checkkey`, {
@@ -118,15 +116,15 @@ const Popup: React.FC = () => {
 			error('checking key', err);
 			return false;
 		}
-	};
+  };
 
-	useEffect(() => {
+  useEffect(() => {
 		(async () => {
 			await gettingUserInfo();
 		})();
-	}, []);
+  }, []);
 
-	useEffect(() => {
+  useEffect(() => {
 		if (userInfo.name === '') return;
 
 		(async () => {
@@ -141,19 +139,24 @@ const Popup: React.FC = () => {
 
 				const data = await response.json();
 				if (response.ok) {
-					const { message, token } = data;
-					setIsAllowed(message.isAllowed);
-					storage.set({ amIAllowed: message.isAllowed });
+					const { message, token, isSuccess } = data;
+					if (isSuccess) {
+						setIsAllowed(message.isAllowed);
+						storage.set({ amIAllowed: message.isAllowed });
 
-					storage.set({ token });
+						storage.set({ token });
+					} else {
+						throw new Error(message);
+					}
 				}
 			} catch (err) {
 				error('Adding User', err);
+				setSystemError('Oops! Something went wrong. Please try again or contact support.');
 			}
 		})();
-	}, [userInfo]);
+  }, [userInfo]);
 
-	return (
+  return (
 		<section className="w-80 bg-lightest flex flex-col">
 			<header className="flex flex-col bg-primary py-2 px-4 text-secondary">
 				<h1 className="text-flg font-bold">Open Source Pal</h1>
@@ -196,10 +199,12 @@ const Popup: React.FC = () => {
 							)}
 						</div>
 					)}
+
+					<p className="text-red-600 text-fmd text-center">{systemError}</p>
 				</main>
 			)}
 		</section>
-	);
+  );
 };
 
 export default Popup;
