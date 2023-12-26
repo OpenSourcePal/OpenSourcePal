@@ -32,5 +32,5 @@ export default Clone;
 
 const ShowMe = ({ cssClass }: { cssClass: string }) => {
 	const { onClickWalkThrough } = useArrowNavigation();
-	return <Button label="Show Me" action={() => onClickWalkThrough('.js-clone-url-http')} className={`px-2 py-1 rounded-sm bg-primary text-white ${!isFirefox && 'hidden'}`} />;
+	return <Button label="Show Me" action={() => onClickWalkThrough(cssClass)} className={`px-2 py-1 rounded-sm bg-primary text-white ${!isFirefox && 'hidden'}`} />;
 };
