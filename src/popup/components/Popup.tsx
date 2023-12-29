@@ -88,7 +88,6 @@ const Popup: React.FC = () => {
 			});
 		} catch (err) {
 			setUserInfo({ ...userInfo, name: '' });
-			setSystemError('Something went wrong while fetching user info');
 			error('Get User', err);
 		} finally {
 			setLoading({ ...loading, auth: false });
@@ -200,7 +199,7 @@ const Popup: React.FC = () => {
 						</div>
 					)}
 
-					<p className="text-red-600 text-fmd text-center">{systemError}</p>
+					<p className="text-red-600 text-fxs text-center">{systemError}</p>
 				</main>
 			)}
 		</section>
