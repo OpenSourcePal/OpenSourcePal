@@ -9,7 +9,7 @@ import Button from 'components/Button';
 import storage from 'utils/storage';
 import { getUserInfo } from 'utils/api';
 
-const serverurl = process.env.SEVERURL;
+const serverurl = process.env.SERVERURL;
 
 const Popup: React.FC = () => {
 	const [userInfo, setUserInfo] = useState<UserInfoType>({

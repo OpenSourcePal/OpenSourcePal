@@ -2,7 +2,7 @@ import { error } from 'utils/helper';
 import storage from 'utils/storage';
 import { runtime, tabs, Runtime } from 'webextension-polyfill';
 
-const serverurl = process.env.SEVERURL;
+const serverurl = process.env.SERVERURL;
 /**
  * Initialize background script
  */
