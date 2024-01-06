@@ -19,7 +19,7 @@ export const getUserInfo = async (accessToken: string) => {
 };
 
 export const sendUserToServer = async (userData: UserInfoType) => {
-	const response = await fetch(`${process.env.SeverURL}/api/user/addUser`, {
+	const response = await fetch(`${process.env.SERVERURL}/api/user/addUser`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
