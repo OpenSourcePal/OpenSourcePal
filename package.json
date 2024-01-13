@@ -27,6 +27,7 @@
 	},
 	"author": "",
 	"dependencies": {
+		"@google/generative-ai": "^0.1.3",
 		"@iconify/react": "^4.1.1",
 		"@react-spring/web": "^9.7.3",
 		"@types/crypto-js": "^4.2.1",
@@ -39,7 +40,6 @@
 		"detect-url-change": "^1.0.2",
 		"dotenv": "^16.3.1",
 		"html-webpack-plugin": "^5.5.3",
-		"openai": "^4.0.0",
 		"prop-types": "^15.8.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",

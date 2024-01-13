@@ -111,3 +111,27 @@ export const getIssueInfo = async (accessToken: string, issueNumber: number) => 
 		error('Error while getting issue info', error);
 	}
 };
+
+export const getRepoReadme = async (accessToken: string) => {
+	try {
+		const owner = extractDetailsFromUrl('owner');
+		const repo = extractDetailsFromUrl('repo');
+
+		const response = await fetch(`${BASE_URL}/repos/${owner}/${repo}/readme`, {
+			headers: {
+				Accept: 'application/vnd.github+json',
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+
+		const data = await response.json();
+
+		if (response.status === 200) {
+			return atob(data.content);
+		}
+
+		return null;
+	} catch (error) {
+		error('Error while getting readme content', error);
+	}
+};

@@ -42,7 +42,7 @@ const onInstalled = ({ reason }: { reason: any }) => {
  * @returns
  */
 export async function onMessage(message: any, sender: Runtime.SendMessageOptionsType) {
-	try {
+  try {
 		if (message.action === 'AUTH_CODE_RECEIVED') {
 			const authorizationCode = message.code;
 			const response = await fetch('https://github.com/login/oauth/access_token', {
@@ -70,33 +70,36 @@ export async function onMessage(message: any, sender: Runtime.SendMessageOptions
 			}
 		} else if (message.action === 'UPDATE_COUNT') {
 			const username = message.username;
-      try {
-			const token = await storage.get('token');
-			const response = await fetch(`${serverurl}/user/updateCount`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify({ name: username }),
-			});
+			try {
+				const tokenStorage = await storage.get('token');
+				const token = tokenStorage.token;
 
-			const data = await response.json();
-			if (response.status === 204) {
+				const response = await fetch(`${serverurl}/user/updateCount`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify({ name: username }),
+				});
+
+				const data = await response.json();
 				console.log({ data });
-				return data.isSuccess;
-			} else {
+				if (response.status === 204) {
+					console.log({ data });
+					return data.isSuccess;
+				} else {
+					return false;
+				}
+			} catch (err) {
+				error('checking limit', err);
 				return false;
 			}
-		} catch (err) {
-			error('checking limit', err);
-			return false;
 		}
-		}
-	} catch (error) {
+  } catch (error) {
 		console.error('[===== Error in MessageListener =====]', error);
 		return error;
-	}
+  }
 }
 
 /**

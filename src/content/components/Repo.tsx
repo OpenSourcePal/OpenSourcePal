@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import detectChangeUrl from 'detect-url-change';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import Markdown from 'react-markdown';
-import browser from 'webextension-polyfill';
 
 import Readme from './Readme';
 import { error, extractDetailsFromUrl, retrieveAccessToken } from 'utils/helper';
@@ -19,10 +18,8 @@ type issuesType = {
 	issueHelp: string | null;
 };
 
-const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
-	dangerouslyAllowBrowser: true,
-});
+const genAI = new GoogleGenerativeAI(process.env.API_KEY as string);
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 // TODO: add loading messages instead of just loading
 // TODO: add result of issue help to localhost
@@ -122,36 +119,16 @@ const Repo: React.FC<{ className: string; name: string }> = ({ className, name }
 
 		setLoading(true);
 		// TODO: check if user is assigned to the issue
-		checkLimitAndUpdate();
-	};
-
-	const checkLimitAndUpdate = () => {
-		browser.runtime
-			.sendMessage({ action: 'UPDATE_COUNT', username: name })
-			.then(async (response: boolean) => {
-				if (response) {
-					await setIssueHelp();
-				}
-				setLoading(false);
-			})
-			.catch((err: any) => {
-				error('failed update', err);
-				setLoading(false);
-			});
+		setIssueHelp().catch(console.error);
 	};
 
 	const setIssueHelp = async () => {
-		const completion = await openai.chat.completions.create({
-			model: 'gpt-3.5-turbo',
-			messages: [
-				{ role: 'system', content: `You are an expert at open source software and software development and I'm a beginner` },
-				{
-					role: 'user',
-					content: `Give me steps for solving this github issue i was assigned to code wise if it's related to coding/programming, if it's not give the general steps to help solve it, the issue title is "${issueTitle}" and the issue body is "${issueBody}", return the result in list form and markdown`,
-				},
-			],
-		});
-		setIssues((prevIssues) => ({ ...prevIssues, issueHelp: completion.choices[0].message.content }));
+		const prompt = `You are an expert at open source software and software development and I'm a beginner. I'm assigned this issue, the issue title is "${issueTitle}" and the issue body is "${issueBody}", give me steps for solving this github issue if it's related to coding/programming, if it's not, give the general steps to help solve it, return the result in list form and markdown`;
+
+		const result = await model.generateContent(prompt);
+		const response = result.response.text();
+		setLoading(false);
+		setIssues((prevIssues) => ({ ...prevIssues, issueHelp: response }));
 	};
 
 	return (
