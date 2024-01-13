@@ -48,6 +48,7 @@ Before installation, please make sure you have already installed the following t
     ```bash
     npm run dev:{the browser you use}
     ```
+6. Use `devmode` for the accesskey
   
 ### 🥂 After making a change
 
