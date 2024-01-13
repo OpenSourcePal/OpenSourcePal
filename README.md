@@ -29,25 +29,25 @@ Before installation, please make sure you have already installed the following t
 ### 🛠️ Installation Steps
 1. Fork the repo
 2. Clone the repository
-  ```bash
-  git clone https://github.com/<your-username>/OpenSourcePal.git
-  ```
+    ```bash
+    git clone https://github.com/<your-username>/OpenSourcePal.git
+    ```
 3. Run
-  ```bash
-  npm install
-  ```
-  ```bash
-  npm install -g commitizen
-  ```
+    ```bash
+    npm install
+    ```
+    ```bash
+    npm install -g commitizen
+    ```
 4. Fill in the .env with the .env_sample
-   i. [learn how to get a github id & secret](https://www.youtube.com/watch?v=R9lxXQcy-nM) in the field of *Authorization callback URL* use the video below to know how
-      ![0113](https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/5cf0878f-b639-4173-9566-07731d42a753)
-   ii. [Get the api key](https://makersuite.google.com/app/apikey)
-   iii. for the server url run [the backend code](https://github.com/OpenSourcePal/OSP-backend)
+   1. [learn how to get a github id & secret](https://www.youtube.com/watch?v=R9lxXQcy-nM) in the field of *Authorization callback URL* use the video below to know how
+      https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/a7f5f28f-59df-4b51-a05a-0264d8a817cd
+   2. [Get the api key](https://makersuite.google.com/app/apikey)
+   3. For the server url run [the backend code](https://github.com/OpenSourcePal/OSP-backend)
 5. Run `npm run dev:{the browser you use}` EX: `npm run dev:chrome`
-  ```bash
-  npm run dev:{the browser you use}
-  ```
+    ```bash
+    npm run dev:{the browser you use}
+    ```
   
 ### 🥂 After making a change
 
