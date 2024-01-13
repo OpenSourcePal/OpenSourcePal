@@ -40,10 +40,10 @@ Before installation, please make sure you have already installed the following t
   npm install -g commitizen
   ```
 4. Fill in the .env with the .env_sample
-  > [learn how to get a github id & secret](https://www.youtube.com/watch?v=R9lxXQcy-nM) in the field of *Authorization callback URL* use the video below to know how
-  > https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/f56cfdad-062c-4cac-9ace-2df847f52e0c
-  >> [Get the api key](https://makersuite.google.com/app/apikey)
-  >>> for the server url run [the backend code](https://github.com/OpenSourcePal/OSP-backend)
+   i. [learn how to get a github id & secret](https://www.youtube.com/watch?v=R9lxXQcy-nM) in the field of *Authorization callback URL* use the video below to know how
+      ![0113](https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/5cf0878f-b639-4173-9566-07731d42a753)
+   ii. [Get the api key](https://makersuite.google.com/app/apikey)
+   iii. for the server url run [the backend code](https://github.com/OpenSourcePal/OSP-backend)
 5. Run `npm run dev:{the browser you use}` EX: `npm run dev:chrome`
   ```bash
   npm run dev:{the browser you use}
