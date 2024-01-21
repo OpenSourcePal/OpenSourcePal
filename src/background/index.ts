@@ -74,8 +74,8 @@ export async function onMessage(message: any, sender: Runtime.SendMessageOptions
 				const tokenStorage = await storage.get('token');
 				const token = tokenStorage.token;
 
-				const response = await fetch(`${serverurl}/user/updateCount`, {
-					method: 'POST',
+				const response = await fetch(`${serverurl}/user`, {
+					method: 'PUT',
 					headers: {
 						'Content-Type': 'application/json',
 						Authorization: `Bearer ${token}`,

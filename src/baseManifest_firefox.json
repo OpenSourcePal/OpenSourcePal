@@ -3,7 +3,7 @@
 	"author": "Dun-sin",
 	"manifest_version": 3,
 	"description": "__MSG_appDescription__",
-	"version": "1.3",
+	"version": "1.4.2",
 	"icons": {
 		"16": "assets/icons/icon-16.png",
 		"24": "assets/icons/icon-24.png",

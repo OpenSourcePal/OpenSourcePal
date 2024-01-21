@@ -97,7 +97,7 @@ const Popup: React.FC = () => {
   const checkIsKeyValid = async (key: string) => {
 		if (userInfo.name === '') return false;
 		try {
-			const response = await fetch(`${serverurl}/early/checkkey`, {
+			const response = await fetch(`${serverurl}/key`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ const Popup: React.FC = () => {
 
 		(async () => {
 			try {
-				const response = await fetch(`${serverurl}/user/addUser`, {
+				const response = await fetch(`${serverurl}/user`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
