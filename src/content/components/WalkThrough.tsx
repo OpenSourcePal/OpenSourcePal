@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import Button from 'components/Button';
 import Accordion from 'components/Accordion';
 import Clone from './WalkThroughs/Clone';
+import Fork from './WalkThroughs/Fork';
 
 type WalkThroughProps = {
 	action: () => void;
@@ -25,8 +26,9 @@ const WalkThrough = ({ action }: WalkThroughProps) => {
 				/>
 				<p className="font-semibold text-base">WalkThrough</p>
 			</div>
-			<div className="flex flex-col gap-5">
+			<div className="flex flex-col gap-1">
 				<Accordion title="How to clone a repo" body={<Clone />} isMarkdown={false} />
+				<Accordion title="How to fork a repo" body={<Fork />} isMarkdown={false} />
 			</div>
 		</div>
 	);
