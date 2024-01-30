@@ -34,7 +34,6 @@ function Main() {
 		walkthrough: false,
 	});
 	const [loading, setLoading] = useState(false);
-	const [isAllowed, setIsAllowed] = useState(false);
 
 	// ALL REFS
 	const mainSideBar = useRef<HTMLDivElement | null>(null);
@@ -69,12 +68,9 @@ function Main() {
 					avatar: data.avatar_url,
 					url: data.html_url,
 				});
-				const result = await storage.get('amIAllowed');
-				const gottenResult = result.amIAllowed || null;
-				setIsAllowed(gottenResult || false);
-				setLoading(false);
 			} catch (error) {
 				console.error('Get User', error);
+			} finally {
 				setLoading(false);
 			}
 		})();
@@ -101,7 +97,7 @@ function Main() {
 					<div className="w-full flex justify-center items-center">
 						<Dna visible={true} height="80" width="80" ariaLabel="dna-loading" wrapperClass="dna-wrapper" />
 					</div>
-				) : userInfo.name !== '' && isAllowed ? (
+				) : userInfo.name !== '' ? (
 					<>
 						<header className="flex justify-between items-center">
 							<Icon icon="tabler:layout-sidebar-left-expand-filled" className="h-6 w-6 text-secondary cursor-pointer" onClick={closeSideBar} />

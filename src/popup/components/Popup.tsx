@@ -18,20 +18,11 @@ const Popup: React.FC = () => {
 		url: '',
 	});
 	const [loading, setLoading] = useState({ auth: false, key: false });
-	const [isAllowed, setIsAllowed] = useState(false);
-  const [systemError, setSystemError] = useState<null | string>(null);
+	const [systemError, setSystemError] = useState<null | string>(null);
 
-  const keyInput = useRef<HTMLInputElement>(null);
-  const allowAccess = async () => {
-		if (keyInput.current?.value === '' || !keyInput.current?.value) return;
+	const keyInput = useRef<HTMLInputElement>(null);
 
-		const key = keyInput.current?.value;
-		const amIAllowed = await checkIsKeyValid(key);
-		setIsAllowed(amIAllowed);
-		storage.set({ amIAllowed });
-  };
-
-  const authenticateGitHub = () => {
+	const authenticateGitHub = () => {
 		setLoading({ ...loading, auth: true });
 
 		const authorizationUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_ID}&redirect_uri=${encodeURIComponent(
@@ -64,15 +55,14 @@ const Popup: React.FC = () => {
 				error('Auth', error);
 				setSystemError(`Oops, couldn't authenticate user, pls try again or contact support`);
 			});
-  };
+	};
 
-  const logOut = async () => {
+	const logOut = async () => {
 		await deleteAccessToken();
-		await storage.remove('isAllowed');
 		setUserInfo({ ...userInfo, name: '' });
-  };
+	};
 
-  const gettingUserInfo = async () => {
+	const gettingUserInfo = async () => {
 		setLoading({ ...loading, auth: true });
 		try {
 			const accessToken = await retrieveAccessToken();
@@ -92,9 +82,9 @@ const Popup: React.FC = () => {
 		} finally {
 			setLoading({ ...loading, auth: false });
 		}
-  };
+	};
 
-  const checkIsKeyValid = async (key: string) => {
+	const checkIsKeyValid = async (key: string) => {
 		if (userInfo.name === '') return false;
 		try {
 			const response = await fetch(`${serverurl}/key`, {
@@ -115,15 +105,15 @@ const Popup: React.FC = () => {
 			error('checking key', err);
 			return false;
 		}
-  };
+	};
 
-  useEffect(() => {
+	useEffect(() => {
 		(async () => {
 			await gettingUserInfo();
 		})();
-  }, []);
+	}, []);
 
-  useEffect(() => {
+	useEffect(() => {
 		if (userInfo.name === '') return;
 
 		(async () => {
@@ -140,9 +130,6 @@ const Popup: React.FC = () => {
 				if (response.ok) {
 					const { message, token, isSuccess } = data;
 					if (isSuccess) {
-						setIsAllowed(message.isAllowed);
-						storage.set({ amIAllowed: message.isAllowed });
-
 						storage.set({ token });
 					} else {
 						throw new Error(message);
@@ -153,9 +140,9 @@ const Popup: React.FC = () => {
 				setSystemError('Oops! Something went wrong. Please try again or contact support.');
 			}
 		})();
-  }, [userInfo]);
+	}, [userInfo]);
 
-  return (
+	return (
 		<section className="w-80 bg-lightest flex flex-col">
 			<header className="flex flex-col bg-primary py-2 px-4 text-secondary">
 				<h1 className="text-flg font-bold">Open Source Pal</h1>
@@ -180,30 +167,17 @@ const Popup: React.FC = () => {
 								}
 							/>
 						</span>
-					) : isAllowed ? (
+					) : (
 						<div className="flex justify-between flex-wrap items-center">
 							<h2 className="font-semibold text-fmd">Hello {userInfo.name}</h2>
 							<Button className="p-2 bg-brand rounded flex text-lightest items-center justify-center" action={logOut} label={<span>LogOut</span>} />
 						</div>
-					) : (
-						<div className="flex flex-col gap-3 items-center">
-							<h1>Join Early Access</h1>
-							<input placeholder="Enter Key" type="text" ref={keyInput} />
-							{loading.key ? (
-								<div className="w-full flex justify-center items-center">
-									<Dna visible={true} height="40" width="40" ariaLabel="dna-loading" wrapperClass="dna-wrapper" />
-								</div>
-							) : (
-								<Button label="Submit" action={() => allowAccess()} />
-							)}
-						</div>
 					)}
-
 					<p className="text-red-600 text-fxs text-center">{systemError}</p>
 				</main>
 			)}
 		</section>
-  );
+	);
 };
 
 export default Popup;
