@@ -8,3 +8,4 @@ output
 .vscode
 
 .env-local
+package-lock.json

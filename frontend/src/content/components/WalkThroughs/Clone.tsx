@@ -1,36 +1,18 @@
 import React from 'react';
+import WalkThroughContainer from 'components/WalkThrough';
 
-import Button from 'components/Button';
-import Code from 'components/Code';
-
-import { useArrowNavigation } from 'content/hooks/useArrow';
-
-import { isFirefox } from 'content/utils/lib';
+const steps: StepsType = [
+	{ label: 'Open the "Code" dropdown', elementPaath: '#\\:R55ab\\:' },
+	{
+		label: 'Copy the URL',
+		elementPaath: '#__primerPortalRoot__ > div > div > div > ul > div:nth-child(2) > div > div.Box-sc-g0xbh4-0.cMYnca > div > button',
+		dependantElementPath: [`#\\:R55ab\\:`],
+	},
+	{ label: 'Paste the URL in your terminal', code: 'git clone (URL)' },
+];
 
 const Clone = () => {
-	return (
-		<>
-			<ul className="px-3 py-2 flex flex-col gap-2 bg-secondary text-primary">
-				<li className="flex items-center justify-between">
-					<span>Open the "Code" dropdown</span>
-					<ShowMe cssClass=".js-codespaces-details-container" />
-				</li>
-				<li className="flex items-center justify-between">
-					<span>Copy the URL</span>
-					<ShowMe cssClass=".js-clone-url-http" />
-				</li>
-				<li>
-					<p>Paste the URL in your terminal</p>
-					<Code body="git clone (URL)" />
-				</li>
-			</ul>
-		</>
-	);
+	return <WalkThroughContainer steps={steps} />;
 };
 
 export default Clone;
-
-const ShowMe = ({ cssClass }: { cssClass: string }) => {
-	const { onClickWalkThrough } = useArrowNavigation();
-	return <Button label="Show Me" action={() => onClickWalkThrough(cssClass)} className={`px-2 py-1 rounded-sm bg-primary text-white ${!isFirefox && 'hidden'}`} />;
-};

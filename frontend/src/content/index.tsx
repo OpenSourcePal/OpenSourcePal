@@ -1,26 +1,27 @@
 // REACT
-import { createRoot } from 'react-dom/client';
-import React, { useEffect, useRef, useState } from 'react';
 
-// LIBRIES
-import { Icon } from '@iconify/react';
-
-import detectChangeUrl from 'detect-url-change';
-import { animated, useSpring } from '@react-spring/web';
-import { Dna } from 'react-loader-spinner';
-
-// LOCAL
 import '../assets/css/tailwind.css';
-import { retrieveAccessToken } from 'utils/helper';
 
-// COMPONENTS
+import React, { useEffect, useRef, useState } from 'react';
+import { animated, useSpring } from '@react-spring/web';
+
+import Button from 'components/Button';
+import { Dna } from 'react-loader-spinner';
+import { Icon } from '@iconify/react';
 import Repo from './components/Repo';
 import Resources from './components/Resources';
 import WalkThrough from './components/WalkThrough';
-import Button from 'components/Button';
-
+import { createRoot } from 'react-dom/client';
+import detectChangeUrl from 'detect-url-change';
 import { getUserInfo } from 'utils/api';
+import { retrieveAccessToken } from 'utils/helper';
 import storage from 'utils/storage';
+
+// LIBRIES
+
+// LOCAL
+
+// COMPONENTS
 
 function Main() {
 	const [userInfo, setUserInfo] = useState<UserInfoType>({
@@ -52,6 +53,14 @@ function Main() {
 		},
 	});
 
+	const openSideBar = () => {
+		setIsOpen(true);
+	};
+
+	const closeSideBar = () => {
+		setIsOpen(false);
+	};
+
 	useEffect(() => {
 		(async () => {
 			setLoading(true);
@@ -76,14 +85,9 @@ function Main() {
 		})();
 	}, []);
 
-	const openSideBar = () => {
-		setIsOpen(true);
-	};
-
-	const closeSideBar = () => {
-		setIsOpen(false);
-	};
-
+	useEffect(() => {
+		openSideBar();
+	}, []);
 	return (
 		<>
 			{!isOpen && <Icon icon="tabler:layout-sidebar-right-expand-filled" className="h-6 w-6 text-secondary cursor-pointer" onClick={openSideBar} />}

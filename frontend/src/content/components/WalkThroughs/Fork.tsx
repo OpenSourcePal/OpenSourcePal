@@ -1,21 +1,21 @@
 import React from 'react';
+import WalkThroughContainer from 'components/WalkThrough';
+
+const steps: StepsType = [
+	{
+		label: 'Click on the "fork" button by the "star" button',
+		elementPaath: '#fork-button',
+	},
+	{
+		label: 'Check "Copy the main branch only" option',
+		elementPaath: '#js-repo-pjax-container > react-app > div > form > div.Box-sc-g0xbh4-0.ggBEtM > div.Box-sc-g0xbh4-0.hZnBBv > label',
+		dependantElementPath: ['#fork-button'],
+	},
+	{ label: 'Click on create fork', elementPaath: '#js-repo-pjax-container > react-app > div > form > div.Box-sc-g0xbh4-0.aBKvw > button', dependantElementPath: ['#fork-button'] },
+];
 
 const Fork = () => {
-	return (
-		<>
-			<ul className="px-3 py-2 flex flex-col gap-2 bg-secondary text-primary">
-				<li className="flex items-center justify-between">
-					<span>Click on the "fork" button by the "star" button</span>
-				</li>
-				<li className="flex items-center justify-between">
-					<span>Check "Copy the main branch only" option</span>
-				</li>
-				<li className="flex items-center justify-between">
-					<span>Click on create fork</span>
-				</li>
-			</ul>
-		</>
-	);
+	return <WalkThroughContainer steps={steps} />;
 };
 
 export default Fork;

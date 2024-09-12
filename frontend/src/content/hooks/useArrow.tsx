@@ -1,3 +1,4 @@
+import { addSpaces, getElement, removeSpaces } from 'content/utils/lib';
 import { useEffect, useState } from 'react';
 
 interface Position {
@@ -82,23 +83,47 @@ export const useArrowNavigation = () => {
 
 		arrows.forEach((id) => {
 			const elementClass = id.replace('-arrow', '');
-			const element = document.querySelector(elementClass) as HTMLElement;
+
+			const element = document.querySelector(addSpaces(elementClass)) as HTMLElement;
 			createArrow(element, elementClass);
 		});
 	};
 
-	const onClickWalkThrough = (elementClass: string): void => {
-		if (elementClass.length === 0) return;
-		const element = document.querySelector(elementClass) as HTMLElement;
-		element?.scrollIntoView({ behavior: 'smooth' });
+	const onClickWalkThrough = (elementPaath: string, dependantElementPath?: string[]): void => {
+		if (elementPaath.length === 0) return;
 
-		createArrow(element, elementClass);
+		const processElement = () => {
+			const element = getElement(elementPaath);
+
+			if (element) {
+				const elementClass = removeSpaces(elementPaath);
+
+				element.scrollIntoView({ behavior: 'smooth' });
+				createArrow(element, elementClass);
+			} else {
+				console.error(`Element not found: ${elementPaath}`);
+			}
+		};
+
+		if (dependantElementPath) {
+			const dependantElements: HTMLElement[] = dependantElementPath.map((item) => getElement(item));
+
+			dependantElements.forEach((element) => {
+				if (element) {
+					element.click();
+				}
+			});
+
+			setTimeout(processElement, 200);
+		} else {
+			processElement();
+		}
 	};
 
 	useEffect(() => {
 		setTimeout(() => {
 			removeArrow(currentArrowId);
-		}, 7000);
+		}, 3000);
 	}, [currentArrowId]);
 
 	useEffect(() => {
