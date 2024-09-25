@@ -6,6 +6,8 @@
 2. React
 3. Tailwind
 4. Webextension-polyfill
+5. MongoDB
+6. Express
 
 ## 👇🏽 Prerequisites
 
@@ -34,17 +36,13 @@ Before installation, please make sure you have already installed the following t
     ```
 3. Run
     ```bash
-    npm install
+    cd frontend && npm install && cd ../backend && npm install && npm run dev
     ```
-    ```bash
-    npm install -g commitizen
-    ```
-4. Fill in the .env with the .env_sample
+4. Fill in the .env with the .env_sample for the frontend
    1. [learn how to get a github id & secret](https://www.youtube.com/watch?v=R9lxXQcy-nM) in the field of *Authorization callback URL* use the video below to know how
       https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/a7f5f28f-59df-4b51-a05a-0264d8a817cd
    2. [Get the api key](https://makersuite.google.com/app/apikey)
-   3. For the server url run [the backend code](https://github.com/OpenSourcePal/OSP-backend)
-5. Run `npm run dev:{the browser you use}` EX: `npm run dev:chrome`
+5. Run `npm run dev:{the browser you use}` EX: `npm run dev:chrome` in the frontend directory
     ```bash
     npm run dev:{the browser you use}
     ```
@@ -114,6 +112,7 @@ Code-Magic is licensed under the MIT License - see the [LICENSE](LICENSE) file f
 
 ### 💪🏽 Thanks to all Contributors
 Thanks a lot for spending your time helping Code-Magic grow. Thanks a lot! Keep rocking🍻
+
 [![Contributors](https://contrib.rocks/image?repo=OpenSourcePal/OpenSourcePal)](https://github.com/OpenSourcePal/OpenSourcePal/graphs/contributors)
 
 ### 🙏🏽 Support
