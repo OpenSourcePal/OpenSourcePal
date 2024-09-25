@@ -108,10 +108,10 @@ If you have any questions or comments, I'd be happy to hear your thoughts. on ou
 
 ### 🛡️ License
 
-Code-Magic is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+OpenSourcePal is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### 💪🏽 Thanks to all Contributors
-Thanks a lot for spending your time helping Code-Magic grow. Thanks a lot! Keep rocking🍻
+Thanks a lot for spending your time helping OpenSourcePal grow. Thanks a lot! Keep rocking🍻
 
 [![Contributors](https://contrib.rocks/image?repo=OpenSourcePal/OpenSourcePal)](https://github.com/OpenSourcePal/OpenSourcePal/graphs/contributors)
 
