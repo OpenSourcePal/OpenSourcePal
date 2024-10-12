@@ -85,9 +85,6 @@ function Main() {
 		})();
 	}, []);
 
-	useEffect(() => {
-		openSideBar();
-	}, []);
 	return (
 		<>
 			{!isOpen && <Icon icon="tabler:layout-sidebar-right-expand-filled" className="h-6 w-6 text-secondary cursor-pointer" onClick={openSideBar} />}
