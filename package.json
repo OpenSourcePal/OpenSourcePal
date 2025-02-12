@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "semantic-release": "semantic-release"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "semantic-release": "^21.1.2"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "packageManager": "npm@10.0.0"
+}

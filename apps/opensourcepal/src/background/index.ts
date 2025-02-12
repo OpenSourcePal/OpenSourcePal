@@ -1,6 +1,7 @@
+import { Runtime, runtime, tabs } from 'webextension-polyfill';
+
 import { error } from 'utils/helper';
 import storage from 'utils/storage';
-import { runtime, tabs, Runtime } from 'webextension-polyfill';
 
 const serverurl = process.env.SERVERURL;
 /**
@@ -28,7 +29,7 @@ function initBackground() {
 const onInstalled = ({ reason }: { reason: any }) => {
 	console.log('[===== Installed Extension!] =====', reason);
 	if (reason === 'install') {
-		chrome.tabs.create({
+		tabs.create({
 			url: 'onBoarding/index.html',
 		});
 	}
@@ -42,7 +43,7 @@ const onInstalled = ({ reason }: { reason: any }) => {
  * @returns
  */
 export async function onMessage(message: any, sender: Runtime.SendMessageOptionsType) {
-  try {
+	try {
 		if (message.action === 'AUTH_CODE_RECEIVED') {
 			const authorizationCode = message.code;
 			const response = await fetch('https://github.com/login/oauth/access_token', {
@@ -96,10 +97,10 @@ export async function onMessage(message: any, sender: Runtime.SendMessageOptions
 				return false;
 			}
 		}
-  } catch (error) {
+	} catch (error) {
 		console.error('[===== Error in MessageListener =====]', error);
 		return error;
-  }
+	}
 }
 
 /**

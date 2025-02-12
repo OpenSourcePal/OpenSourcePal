@@ -1,13 +1,16 @@
 # 🚀Open Source Pal
-## Open Source Pal is a web extension built to help beginners in tech get into open source.
+
+## Open Source Pal is a web extension built to help beginners in tech get into open source
 
 ## ⚒️ Languages / Tools
+
 1. TypeScript
 2. React
 3. Tailwind
 4. Webextension-polyfill
 5. MongoDB
 6. Express
+7. Turbo
 
 ## 👇🏽 Prerequisites
 
@@ -17,36 +20,38 @@ Before installation, please make sure you have already installed the following t
 2. [NodeJs](https://nodejs.org/en/download/)
 
 ## How to Use
+
 1. install it
   [Chrome Link](https://chromewebstore.google.com/detail/open-source-pal/piplcgelcmkbfjinnbgnkeebenabcjjj), other browsers coming soon
 2. click on the icon in your extension list
   ![image](https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/cdea7705-e152-499c-ace4-ce4724b2f046)
 3. sign in to github
-4. it will ask for an access code, ask on the [discord](https://discord.gg/ufcysW9q23) server in #-coding-talk channel
-5. go to github and go to any project you want to contribute to
-6. check for an open icon close to your profile picture for github(if you can't see it, refresh the page)
+4. go to github and go to any project you want to contribute to
+5. check for an open icon close to your profile picture for github(if you can't see it, refresh the page)
   ![image](https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/226c8f1a-e1de-4912-b74d-94c4e5098a78)
 
 ## Contribute
+
 ### 🛠️ Installation Steps
+
 1. Fork the repo
 2. Clone the repository
+
     ```bash
     git clone https://github.com/<your-username>/OpenSourcePal.git
     ```
+
 3. Run
+
     ```bash
-    cd frontend && npm install && cd ../backend && npm install && npm run dev
+    npm run dev
     ```
-4. Fill in the .env with the .env_sample for the frontend
+
+4. Fill in the .env with the .env_sample for the opensourcepal and osp-backend
    1. [learn how to get a github id & secret](https://www.youtube.com/watch?v=R9lxXQcy-nM) in the field of *Authorization callback URL* use the video below to know how
-      https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/a7f5f28f-59df-4b51-a05a-0264d8a817cd
+      <https://github.com/OpenSourcePal/OpenSourcePal/assets/78784850/a7f5f28f-59df-4b51-a05a-0264d8a817cd>
    2. [Get the api key](https://makersuite.google.com/app/apikey)
-5. Run `npm run dev:{the browser you use}` EX: `npm run dev:chrome` in the frontend directory
-    ```bash
-    npm run dev:{the browser you use}
-    ```
-6. Use `devmode` for the accesskey
+5. Use `devmode` for the accesskey
   
 ### 🥂 After making a change
 
@@ -111,9 +116,11 @@ If you have any questions or comments, I'd be happy to hear your thoughts. on ou
 OpenSourcePal is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### 💪🏽 Thanks to all Contributors
+
 Thanks a lot for spending your time helping OpenSourcePal grow. Thanks a lot! Keep rocking🍻
 
 [![Contributors](https://contrib.rocks/image?repo=OpenSourcePal/OpenSourcePal)](https://github.com/OpenSourcePal/OpenSourcePal/graphs/contributors)
 
 ### 🙏🏽 Support
+
 This project needs a star️ from you. Don't forget to leave a star✨
