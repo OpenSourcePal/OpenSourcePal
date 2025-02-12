@@ -127,7 +127,8 @@ function Main() {
 						{openSection.walkthrough && <WalkThrough action={() => setSection({ ...openSection, walkthrough: false })} />}
 						{openSection.resources && <Resources action={() => setSection({ ...openSection, resources: false })} />}
 
-						<Repo className={openSection.resources || openSection.walkthrough ? 'hidden' : 'flex'} name={userInfo.name} />
+              <Repo className={openSection.resources || openSection.walkthrough ? 'hidden' : 'flex'} name={userInfo.name} />
+              <a href="https://github.com/OpenSourcePal/OpenSourcePal" target="_blank" rel="noopener noreferrer" className='underline underline-offset-1'>Got suggestions? Raise an issue or contribute</a>
 					</>
 				) : (
 					<p>Please Login by clicking on the Extension's Icon</p>
