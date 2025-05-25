@@ -124,3 +124,6 @@ Thanks a lot for spending your time helping OpenSourcePal grow. Thanks a lot! Ke
 ### 🙏🏽 Support
 
 This project needs a star️ from you. Don't forget to leave a star✨
+
+
+<!-- GitAds-Verify: VUGQQUEKAIES3C6XXRDQD1IO3XNFAZAC -->
